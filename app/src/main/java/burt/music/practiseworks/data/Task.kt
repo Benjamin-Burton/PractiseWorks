@@ -29,10 +29,10 @@ import androidx.room.PrimaryKey
     onDelete = ForeignKey.CASCADE)]
 )
 data class Task(
-    @PrimaryKey
+    @PrimaryKey (autoGenerate = true)
     val id: Int,
     val title: String,
-    val student_id: Int,
+    var student_id: Int,
     val type: String, // WARMUP/EXERCISE/PIECE
     val instructions: String,
     val current: Boolean,

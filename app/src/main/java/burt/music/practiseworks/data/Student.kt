@@ -33,7 +33,7 @@ data class Student(
     val email: String,
     val password: String,
     val teacher_id: Int,
-    val join_date: Date?,
+    val join_date: Date,
     val lesson_day: String,
     val lesson_time: String,
 )

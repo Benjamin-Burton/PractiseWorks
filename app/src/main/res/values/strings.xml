@@ -18,4 +18,35 @@
     <string name="save_action">Save</string>
     <string name="sell">Sell</string>
     <string name="yes">Yes</string>
+
+    // Tasks
+    <string name="task">Task</string>
+    <string name="edit_task_title">Edit Task</string>
+    <string name="task_detail_title">Task Details</string>
+    <string name="task_entry_title">Add Task</string>
+    <string name="task_title_req">Task Name *</string>
+    <string name="task_instructions_req">Instructions</string>
+    <string name="task_cues_req">Cues</string>
+
+    // Student
+
+    <string name="student">Student</string>
+    <string name="edit_student_title">Edit Student</string>
+    <string name="student_detail_title">Student Details</string>
+    <string name="student_entry_title">Add Student</string>
+    <string name="student_f_name_req">First name</string>
+    <string name="student_l_name_req">Last Name</string>
+    <string name="student_username_req">Username</string>
+    <string name="student_email_req">Email</string>
+    <string name="student_password_req">Password</string>
+    <string name="student_teacher_id_req">Teacher Id</string>
+    <string name="student_join_date_req">Join Date</string>
+    <string name="student_lesson_day_req">Day of Lesson</string>
+    <string name="student_lesson_time_req">Time of Lesson</string>
+
+    // TaskList
+    <string name="task_list_title">Tasks</string>
+    <string name="task_instructions">Instructions</string>
+    <string name="task_cues">Cues</string>
+    <string name="no_tasks_description">No tasks to display!</string>
 </resources>

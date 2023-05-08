@@ -23,10 +23,14 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import burt.music.practiseworks.PractiseWorksApplication
+import burt.music.practiseworks.ui.listScreens.TaskListViewModel
 import burt.music.practiseworks.ui.item.ItemDetailsViewModel
 import burt.music.practiseworks.ui.item.ItemEditViewModel
 import burt.music.practiseworks.ui.item.ItemEntryViewModel
 import burt.music.practiseworks.ui.home.HomeViewModel
+import burt.music.practiseworks.ui.student.StudentEntryViewModel
+import burt.music.practiseworks.ui.task.TaskDetailsViewModel
+import burt.music.practiseworks.ui.task.TaskEntryViewModel
 
 
 /**
@@ -42,7 +46,7 @@ object AppViewModelProvider {
         }
         // Initializer for ItemEntryViewModel
         initializer {
-            ItemEntryViewModel(inventoryApplication().container.itemsRepository)
+            ItemEntryViewModel(practiseWorksApplication().container.itemsRepository)
         }
 
         // Initializer for ItemDetailsViewModel
@@ -54,8 +58,30 @@ object AppViewModelProvider {
 
         // Initializer for HomeViewModel
         initializer {
-            HomeViewModel()
+            HomeViewModel(practiseWorksApplication().container.itemsRepository)
         }
+
+        // Initializer for TaskDetailsViewModel
+        initializer {
+            TaskDetailsViewModel(this.createSavedStateHandle())
+        }
+
+        // Initializer for TaskEntryViewModel
+        initializer {
+            TaskEntryViewModel(practiseWorksApplication().container.tasksRepository)
+        }
+
+        // Initializer for TaskListViewModel
+        initializer {
+            TaskListViewModel(practiseWorksApplication().container.tasksRepository)
+        }
+
+        // Initializer for StudentEntryViewModel
+        initializer {
+            StudentEntryViewModel(practiseWorksApplication().container.studentsRepository)
+        }
+
+
     }
 }
 
@@ -63,5 +89,5 @@ object AppViewModelProvider {
  * Extension function to queries for [Application] object and returns an instance of
  * [InventoryApplication].
  */
-fun CreationExtras.inventoryApplication(): PractiseWorksApplication =
+fun CreationExtras.practiseWorksApplication(): PractiseWorksApplication =
     (this[AndroidViewModelFactory.APPLICATION_KEY] as PractiseWorksApplication)

@@ -40,4 +40,13 @@ class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewMod
     fun updateUiState(newItemUiState: ItemUiState) {
         itemUiState = newItemUiState.copy( actionEnabled = newItemUiState.isValid())
     }
+
+    /**
+     * Function to save item to the database. Must be suspend.
+     */
+    suspend fun saveItem() {
+        if (itemUiState.isValid()) {
+            itemsRepository.insertItem(itemUiState.toItem())
+        }
+    }
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package burt.music.practiseworks.ui.home
+package burt.music.practiseworks.ui.listScreens
 
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import burt.music.practiseworks.data.Item
-import burt.music.practiseworks.data.ItemsRepository
+import burt.music.practiseworks.data.Task
+import burt.music.practiseworks.data.TasksRepository
+import burt.music.practiseworks.ui.task.TaskTypes
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -29,13 +29,13 @@ import kotlinx.coroutines.flow.stateIn
 /**
  * View Model to retrieve all items in the Room database.
  */
-class HomeViewModel(itemsRepository: ItemsRepository) : ViewModel() {
-    val homeUiState: StateFlow<HomeUiState> =
-        itemsRepository.getAllItemsStream().map { HomeUiState(it) }
+class TaskListViewModel(tasksRepository: TasksRepository) : ViewModel() {
+    val taskListUiState: StateFlow<TaskListUiState> =
+        tasksRepository.getAllTasksStream().map { TaskListUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = HomeUiState()
+                initialValue = TaskListUiState()
             )
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
@@ -43,6 +43,6 @@ class HomeViewModel(itemsRepository: ItemsRepository) : ViewModel() {
 }
 
 /**
- * Ui State for HomeScreen
+ * Ui State for TaskListScreen
  */
-data class HomeUiState(val itemList: List<Item> = listOf())
+data class TaskListUiState(val taskList: List<Task> = listOf())

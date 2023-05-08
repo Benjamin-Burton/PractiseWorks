@@ -26,6 +26,12 @@ import androidx.navigation.navArgument
 import burt.music.practiseworks.ui.home.HomeDestination
 import burt.music.practiseworks.ui.home.HomeScreen
 import burt.music.practiseworks.ui.item.*
+import burt.music.practiseworks.ui.listScreens.TaskListDestination
+import burt.music.practiseworks.ui.listScreens.TaskListScreen
+import burt.music.practiseworks.ui.student.StudentEntryDestination
+import burt.music.practiseworks.ui.student.StudentEntryScreen
+import burt.music.practiseworks.ui.task.TaskEntryDestination
+import burt.music.practiseworks.ui.task.TaskEntryScreen
 
 /**
  * Provides Navigation graph for the application.
@@ -37,12 +43,12 @@ fun PractiseWorksNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = TaskListDestination.route,
         modifier = modifier
     ) {
         composable(route = HomeDestination.route) {
             HomeScreen(
-                navigateToItemEntry = { navController.navigate(ItemEntryDestination.route) },
+                navigateToFirstEntry = { navController.navigate(TaskEntryDestination.route) },
                 navigateToItemUpdate = {
                     navController.navigate("${ItemDetailsDestination.route}/${it}")
                 }
@@ -75,6 +81,28 @@ fun PractiseWorksNavHost(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
             )
+        }
+        composable(
+            route = TaskEntryDestination.route
+        ) {
+            TaskEntryScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() })
+        }
+        composable(
+            route = TaskListDestination.route
+        ) {
+            TaskListScreen(
+                navigateToTaskUpdate = {
+                    navController.navigate("${ItemDetailsDestination.route}/${it}")}
+            )
+        }
+        composable(
+            route = StudentEntryDestination.route
+        ) {
+            StudentEntryScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() })
         }
     }
 }
