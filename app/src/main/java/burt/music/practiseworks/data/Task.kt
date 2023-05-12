@@ -30,11 +30,16 @@ import androidx.room.PrimaryKey
 )
 data class Task(
     @PrimaryKey (autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val title: String,
     var student_id: Int,
     val type: String, // WARMUP/EXERCISE/PIECE
     val instructions: String,
     val current: Boolean,
     val cues: String,
+)
+
+data class TaskNumInfo(
+    val type: String,
+    val count: Int
 )

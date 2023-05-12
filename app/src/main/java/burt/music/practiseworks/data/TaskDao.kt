@@ -25,4 +25,8 @@ interface TaskDao {
     fun getTasksByType(type: String): Flow<List<Task>>
     @Query("SELECT * from task WHERE type = :type AND current = true")
     fun getCurrentTasksByType(type: String): Flow<List<Task>>
+    @Query("SELECT type, COUNT(type) as count FROM task GROUP BY type")
+    fun getCurrentTaskTypes(): Flow<List<TaskNumInfo>>
+    @Query("SELECT COUNT(*) FROM task WHERE type = :type")
+    fun getNumTasksByType(type: String): Int
 }

@@ -7,7 +7,7 @@ import java.util.*
 @Dao
 interface PractiseSessionDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(practiseSession: PractiseSession)
+    suspend fun insert(practiseSession: PractiseSession): Long
     @Update
     suspend fun update(practiseSession: PractiseSession)
     @Delete // note you might need to fetch an entity before deleting it
@@ -16,6 +16,7 @@ interface PractiseSessionDao {
     fun getPractiseSession(id: Int): Flow<PractiseSession> // making this a flow means you only ever have to get the data once - it will be tracked
     // this also means it will auto be on a background thread - so need to make it suspend and call it
     // from a  coroutine scope
+
     @Query("SELECT * from practise_session")
     fun getAllPractiseSessions(): Flow<List<PractiseSession>>
     @Query("SELECT * from practise_session WHERE start_date = :date")

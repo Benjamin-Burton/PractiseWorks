@@ -26,12 +26,12 @@ import java.util.*
  */
 @Entity(tableName = "practise_session", foreignKeys = [ForeignKey(entity = Student::class,
     parentColumns = arrayOf("id"),
-    childColumns = arrayOf("id"),
+    childColumns = arrayOf("student_id"),
     onDelete = ForeignKey.CASCADE)]
 )
 data class PractiseSession(
-    @PrimaryKey
-    val id: Int,
+    @PrimaryKey (autoGenerate = true)
+    val id: Int = 0,
     val student_id: Int,
     val start_date: Date?,
     val end_date: Date?,

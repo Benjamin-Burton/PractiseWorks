@@ -30,7 +30,7 @@ interface StudentsRepository {
     /**
      * Retrieve an Student from the given data source that matches with the [id].
      */
-    fun getStudentStream(id: Int): Flow<Student?>
+    fun getStudentStream(id: Int): Flow<Student>
 
     /**
      * Insert Student in the data source

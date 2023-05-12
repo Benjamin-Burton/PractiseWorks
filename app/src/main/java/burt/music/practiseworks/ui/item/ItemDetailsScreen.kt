@@ -1,5 +1,6 @@
 package burt.music.practiseworks.ui.item
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,19 +19,19 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import burt.music.practiseworks.ui.AppViewModelProvider
 import burt.music.practiseworks.ui.navigation.NavigationDestination
 import burt.music.practiseworks.ui.PractiseWorksTopAppBar
 import burt.music.practiseworks.ui.theme.PractiseWorksTheme
 import com.example.practiseworks.R
+import kotlinx.coroutines.launch
 
 object ItemDetailsDestination : NavigationDestination {
     override val route = "item_details"
@@ -44,7 +45,10 @@ fun ItemDetailsScreen(
     navigateToEditItem: (Int) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: ItemDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val uiState = viewModel.uiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             PractiseWorksTopAppBar(
@@ -55,7 +59,8 @@ fun ItemDetailsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navigateToEditItem(0) },
+                onClick = { navigateToEditItem(uiState.value.id)
+                           },
                 modifier = Modifier.navigationBarsPadding()
             ) {
                 Icon(
@@ -67,9 +72,13 @@ fun ItemDetailsScreen(
         },
     ) { innerPadding ->
         ItemDetailsBody(
-            itemUiState = ItemUiState(),
-            onSellItem = {  },
-            onDelete = { },
+            itemUiState = uiState.value,
+            onSellItem = { viewModel.reduceQuantityByOne() },
+            onDelete = {
+                coroutineScope.launch {
+                    viewModel.deleteItem()
+                    navigateBack()
+                } },
             modifier = modifier.padding(innerPadding)
         )
     }

@@ -26,12 +26,16 @@ import androidx.navigation.navArgument
 import burt.music.practiseworks.ui.home.HomeDestination
 import burt.music.practiseworks.ui.home.HomeScreen
 import burt.music.practiseworks.ui.item.*
+import burt.music.practiseworks.ui.listScreens.PractiseScreen
+import burt.music.practiseworks.ui.listScreens.PractiseScreenDestination
 import burt.music.practiseworks.ui.listScreens.TaskListDestination
 import burt.music.practiseworks.ui.listScreens.TaskListScreen
 import burt.music.practiseworks.ui.student.StudentEntryDestination
 import burt.music.practiseworks.ui.student.StudentEntryScreen
 import burt.music.practiseworks.ui.task.TaskEntryDestination
 import burt.music.practiseworks.ui.task.TaskEntryScreen
+import burt.music.practiseworks.ui.welcome.WelcomeDestination
+import burt.music.practiseworks.ui.welcome.WelcomeScreen
 
 /**
  * Provides Navigation graph for the application.
@@ -43,12 +47,12 @@ fun PractiseWorksNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = TaskListDestination.route,
+        startDestination = WelcomeDestination.route,
         modifier = modifier
     ) {
         composable(route = HomeDestination.route) {
             HomeScreen(
-                navigateToFirstEntry = { navController.navigate(TaskEntryDestination.route) },
+                navigateToFirstEntry = { navController.navigate(ItemEntryDestination.route) },
                 navigateToItemUpdate = {
                     navController.navigate("${ItemDetailsDestination.route}/${it}")
                 }
@@ -103,6 +107,28 @@ fun PractiseWorksNavHost(
             StudentEntryScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() })
+        }
+        composable(
+            route = PractiseScreenDestination.routeWithArgs,
+            arguments = listOf(navArgument(PractiseScreenDestination.practiseIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            PractiseScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() },
+            )
+        }
+        composable(
+            route = WelcomeDestination.route
+        ) {
+            WelcomeScreen(
+                navigateToFirstEntry = {},
+                navigateToItemUpdate = {},
+                navigateToNewPractiseSession = {
+                    navController.navigate("${PractiseScreenDestination.route}/${it}")
+                }
+            )
         }
     }
 }

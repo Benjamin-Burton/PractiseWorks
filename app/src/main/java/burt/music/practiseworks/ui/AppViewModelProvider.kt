@@ -28,9 +28,11 @@ import burt.music.practiseworks.ui.item.ItemDetailsViewModel
 import burt.music.practiseworks.ui.item.ItemEditViewModel
 import burt.music.practiseworks.ui.item.ItemEntryViewModel
 import burt.music.practiseworks.ui.home.HomeViewModel
+import burt.music.practiseworks.ui.listScreens.PractiseScreenViewModel
 import burt.music.practiseworks.ui.student.StudentEntryViewModel
 import burt.music.practiseworks.ui.task.TaskDetailsViewModel
 import burt.music.practiseworks.ui.task.TaskEntryViewModel
+import burt.music.practiseworks.ui.welcome.WelcomeViewModel
 
 
 /**
@@ -38,12 +40,7 @@ import burt.music.practiseworks.ui.task.TaskEntryViewModel
  */
 object AppViewModelProvider {
     val Factory = viewModelFactory {
-        // Initializer for ItemEditViewModel
-        initializer {
-            ItemEditViewModel(
-                this.createSavedStateHandle()
-            )
-        }
+
         // Initializer for ItemEntryViewModel
         initializer {
             ItemEntryViewModel(practiseWorksApplication().container.itemsRepository)
@@ -52,7 +49,16 @@ object AppViewModelProvider {
         // Initializer for ItemDetailsViewModel
         initializer {
             ItemDetailsViewModel(
-                this.createSavedStateHandle()
+                this.createSavedStateHandle(),
+                practiseWorksApplication().container.itemsRepository
+            )
+        }
+
+        // Initializer for ItemEditViewModel
+        initializer {
+            ItemEditViewModel(
+                this.createSavedStateHandle(),
+                practiseWorksApplication().container.itemsRepository
             )
         }
 
@@ -81,13 +87,29 @@ object AppViewModelProvider {
             StudentEntryViewModel(practiseWorksApplication().container.studentsRepository)
         }
 
+        // Initializer for WelcomeViewModel
+        initializer {
+            WelcomeViewModel(practiseWorksApplication().container.studentsRepository,
+                            practiseWorksApplication().container.practiseSessionsRepository,
+                            practiseWorksApplication().container.tasksRepository,
+                            practiseWorksApplication().container.practiseSessionTasksRepository
+            )
+        }
 
+        // Initializer for PractiseScreenViewModel
+        initializer {
+            PractiseScreenViewModel(
+                this.createSavedStateHandle(),
+                practiseWorksApplication().container.tasksRepository,
+                practiseWorksApplication().container.practiseSessionsRepository,
+                practiseWorksApplication().container.practiseSessionTasksRepository)
+        }
     }
 }
 
 /**
  * Extension function to queries for [Application] object and returns an instance of
- * [InventoryApplication].
+ * [PractiseWorksApplication].
  */
 fun CreationExtras.practiseWorksApplication(): PractiseWorksApplication =
     (this[AndroidViewModelFactory.APPLICATION_KEY] as PractiseWorksApplication)

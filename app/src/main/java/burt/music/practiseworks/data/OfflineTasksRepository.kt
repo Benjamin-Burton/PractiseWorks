@@ -19,12 +19,20 @@ package burt.music.practiseworks.data
 import kotlinx.coroutines.flow.Flow
 
 class OfflineTasksRepository(private val taskDao: TaskDao) : TasksRepository {
+
+    override fun getAllCurrentTasksStream(): Flow<List<Task>> = taskDao.getAllCurrentTasks()
     override fun getAllTasksStream(): Flow<List<Task>> = taskDao.getAllTasks()
 
     override fun getTaskStream(id: Int): Flow<Task?> = taskDao.getTask(id)
 
     override fun getAllTasksByTypeStream(type: String): Flow<List<Task>> =
         taskDao.getTasksByType(type)
+
+    override fun getCurrentTaskTypes(): Flow<List<TaskNumInfo>> =
+        taskDao.getCurrentTaskTypes()
+
+    override fun getNumTasksByType(type: String) =
+        taskDao.getNumTasksByType(type)
 
     override suspend fun insertTask(task: Task) = taskDao.insert(task)
 

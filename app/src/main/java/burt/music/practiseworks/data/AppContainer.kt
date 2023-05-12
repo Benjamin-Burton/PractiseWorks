@@ -25,6 +25,8 @@ interface AppContainer {
     val itemsRepository: ItemsRepository
     val studentsRepository: StudentsRepository
     val tasksRepository: TasksRepository
+    val practiseSessionsRepository: PractiseSessionsRepository
+    val practiseSessionTasksRepository: PractiseSessionTasksRepository
 }
 
 /**
@@ -45,4 +47,13 @@ class AppDataContainer(private val context: Context) : AppContainer {
     override val tasksRepository: TasksRepository by lazy {
         OfflineTasksRepository(PractiseWorksDatabase.getDatabase(context).taskDao())
     }
+
+    override val practiseSessionsRepository: PractiseSessionsRepository by lazy {
+        OfflinePractiseSessionsRepository(PractiseWorksDatabase.getDatabase(context).practiseSessionDao())
+    }
+
+    override val practiseSessionTasksRepository: PractiseSessionTasksRepository by lazy {
+        OfflinePractiseSessionTasksRepository(PractiseWorksDatabase.getDatabase(context).practiseSessionTaskDao())
+    }
+
 }

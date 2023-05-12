@@ -21,40 +21,29 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Repository that provides insert, update, delete, and retrieve of [Item] from a given data source.
  */
-interface TasksRepository {
+interface PractiseSessionsRepository {
     /**
-     * Retrieve all the Tasks from the the given data source.
+     * Retrieve all the PractiseSessions from the the given data source.
      */
-    fun getAllTasksStream(): Flow<List<Task>>
-
-    /**
-     * Retrieve an Task from the given data source that matches with the [id].
-     */
-    fun getTaskStream(id: Int): Flow<Task?>
+    fun getAllPractiseSessionsStream(): Flow<List<PractiseSession>>
 
     /**
-     * Insert Task in the data source
+     * Retrieve an PractiseSession from the given data source that matches with the [id].
      */
-    suspend fun insertTask(task: Task)
+    fun getPractiseSessionStream(id: Int): Flow<PractiseSession>
 
     /**
-     * Delete Task from the data source
+     * Insert PractiseSession in the data source
      */
-    suspend fun deleteTask(task: Task)
+    suspend fun insertPractiseSession(student: PractiseSession): Long
 
     /**
-     * Update Task in the data source
+     * Delete PractiseSession from the data source
      */
-    suspend fun updateTask(task: Task)
+    suspend fun deletePractiseSession(student: PractiseSession)
 
     /**
-     * Get all tasks by type
+     * Update PractiseSession in the data source
      */
-    fun getAllTasksByTypeStream(type: String): Flow<List<Task>>
-
-    fun getCurrentTaskTypes(): Flow<List<TaskNumInfo>>
-
-    fun getNumTasksByType(type: String): Int
-
-    fun getAllCurrentTasksStream(): Flow<List<Task>>
+    suspend fun updatePractiseSession(student: PractiseSession)
 }

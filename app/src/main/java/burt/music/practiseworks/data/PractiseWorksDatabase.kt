@@ -9,8 +9,8 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [Item::class, CompletedTask::class, PieceSubtask::class, PractiseSession::class,
-                Resource::class, Student::class, Task::class],
-    version = 3,
+                Resource::class, Student::class, Task::class, PractiseSessionTask::class],
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -22,6 +22,7 @@ abstract class PractiseWorksDatabase: RoomDatabase() {
     abstract fun resourceDao(): ResourceDao
     abstract fun studentDao(): StudentDao
     abstract fun taskDao(): TaskDao
+    abstract fun practiseSessionTaskDao(): PractiseSessionTaskDao
 
     // to ensure singleton
     companion object {

@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.Flow
 class OfflineStudentsRepository(private val studentDao: StudentDao) : StudentsRepository {
     override fun getAllStudentsStream(): Flow<List<Student>> = studentDao.getAllStudents()
 
-    override fun getStudentStream(id: Int): Flow<Student?> = studentDao.getStudent(id)
+    override fun getStudentStream(id: Int): Flow<Student> = studentDao.getStudent(id)
 
     override suspend fun insertStudent(student: Student) = studentDao.insert(student)
 
