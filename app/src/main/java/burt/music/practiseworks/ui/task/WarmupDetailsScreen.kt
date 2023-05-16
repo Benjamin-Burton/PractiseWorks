@@ -1,5 +1,7 @@
 package burt.music.practiseworks.ui.task
 
+import android.content.Context
+import android.media.DrmInitData.SchemeInitData
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,14 +17,22 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Card
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import burt.music.practiseworks.mediaService.MediaAndMetronomeScreenService
+import burt.music.practiseworks.mediaService.MediaPlayerService
+import burt.music.practiseworks.mediaService.MetronomeService
 import burt.music.practiseworks.ui.AppViewModelProvider
 import burt.music.practiseworks.ui.navigation.NavigationDestination
 import burt.music.practiseworks.ui.PractiseWorksTopAppBar
@@ -31,6 +41,7 @@ import burt.music.practiseworks.ui.listScreens.PractiseScreenViewModel
 import burt.music.practiseworks.ui.task.WarmupUiState
 import burt.music.practiseworks.ui.theme.PractiseWorksTheme
 import com.example.practiseworks.R
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -50,8 +61,23 @@ fun WarmupDetailsScreen(
     viewModel: WarmupDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     val warmUpUiState by viewModel.uiState.collectAsState()
     val practiseSessionTaskUiState by viewModel.uiStatePractiseSessionTask.collectAsState()
+    var metronomeOrMedia by remember {
+        mutableStateOf(true) // true = metronome
+    }
+
+    val metronome by remember { mutableStateOf(MetronomeService(
+            mContext = context
+        ))
+    }
+    val mediaPlayer by remember {
+        mutableStateOf(MediaPlayerService(
+            mContext = context,
+            filename = "exercise_1_ng.mp3"
+        ))
+    }
     Scaffold(
         topBar = {
             PractiseWorksTopAppBar(
@@ -60,6 +86,30 @@ fun WarmupDetailsScreen(
                 navigateUp = navigateBack
             )
         },
+        bottomBar = {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (metronomeOrMedia) {
+                    MetronomeUiComponent(
+                        metronome = metronome,
+                        coroutineScope = coroutineScope,
+                        onChange = {
+                            metronomeOrMedia = !metronomeOrMedia
+                        }
+                    )
+                } else {
+                    MediaPlayerUiComponent(
+                        mediaPlayer,
+                        coroutineScope,
+                        onChange = {
+                            metronomeOrMedia = !metronomeOrMedia
+                        },
+                    )
+                }
+            }
+        }
+
 
     ) { innerPadding ->
         WarmupDetailsBody(
@@ -75,6 +125,155 @@ fun WarmupDetailsScreen(
             modifier = modifier.padding(innerPadding)
         )
     }
+}
+
+@Composable
+fun MediaPlayerUiComponent(
+    mediaPlayer: MediaPlayerService,
+    coroutineScope: CoroutineScope,
+    onChange: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(
+                    onClick = {
+                        mediaPlayer.stop()
+                    }
+                ) {
+                    Text(
+                        text = "Stop"
+                    )
+                }
+                Button(
+                    onClick = {
+                        if (mediaPlayer.getIsStopped) {
+                            coroutineScope.launch {
+                                mediaPlayer.play()
+                            }
+                        } else if (mediaPlayer.getIsPaused) {
+                            coroutineScope.launch {
+                                mediaPlayer.play()
+                            }
+                        } else {
+                            coroutineScope.launch {
+                                mediaPlayer.pause()
+                            }
+                        }
+                    }
+                ) {
+                    if (mediaPlayer.getIsStopped) {
+                        Text(
+                            text = "Play"
+                        )
+                    } else {
+                        Text(
+                            text = if (mediaPlayer.getIsPaused) "Play" else "Pause"
+                        )
+                    }
+                }
+                Button(
+                    onClick = onChange
+                ) {
+                    Text(
+                        text = "   >   "
+                    )
+                }
+            }
+        }
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Card(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = mediaPlayer.filename,
+                    textAlign = TextAlign.Center,
+                    fontSize = 18.sp,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MetronomeUiComponent(
+    metronome: MetronomeService,
+    coroutineScope: CoroutineScope,
+    onChange: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Button(
+            onClick = {
+                metronome.reset()
+            }
+        ) {
+            Text(
+                text = "Stop"
+            )
+        }
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    metronome.play()
+                }
+            },
+        ) {
+            Text(
+                text = "Start"
+            )
+        }
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    metronome.increaseBpm(4)
+                }
+            }
+        ) {
+            Text(
+                text = "   +   "
+            )
+        }
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    metronome.decreaseBpm(4)
+                }
+            }
+        ) {
+            Text(
+                text = "   -   "
+            )
+        }
+        Button(
+            onClick = onChange
+        ) {
+            Text(
+                text = "   >   "
+            )
+        }
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = metronome.getCurrentBpm.toString(),
+                textAlign = TextAlign.Center,
+                fontSize = 24.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+
 }
 
 @Composable

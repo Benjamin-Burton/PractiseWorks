@@ -16,15 +16,18 @@
 
 package burt.music.practiseworks.ui.task
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import burt.music.practiseworks.data.PractiseSessionTask
 import burt.music.practiseworks.data.PractiseSessionTasksRepository
 import burt.music.practiseworks.data.TasksRepository
+import burt.music.practiseworks.mediaService.MetronomeService
 import burt.music.practiseworks.ui.item.ItemDetailsDestination
 import kotlinx.coroutines.flow.*
 
@@ -60,6 +63,8 @@ class WarmupDetailsViewModel(
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = PractiseSessionTaskUiState()
             )
+
+
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
