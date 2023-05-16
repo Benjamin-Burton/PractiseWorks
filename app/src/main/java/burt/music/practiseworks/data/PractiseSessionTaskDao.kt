@@ -25,4 +25,6 @@ interface PractiseSessionTaskDao {
     // Solution - have two separate quereies
     @Query("SELECT type, COUNT(*) as numCompleted FROM practise_session_task WHERE practise_session_id = :practiseSessionId AND completed = 1 GROUP BY type")
     fun getNumCompletedTasksBySessionIdAndType(practiseSessionId: Int): Flow<List<PractiseSessionTypeNumCompleted>>
+    @Query("SELECT * FROM practise_session_task WHERE practise_session_id = :sessionId AND task_id = :taskId")
+    fun getPracticeSessionTaskBySessionIdAndTaskId(sessionId: Int, taskId: Int): Flow<PractiseSessionTask>
 }

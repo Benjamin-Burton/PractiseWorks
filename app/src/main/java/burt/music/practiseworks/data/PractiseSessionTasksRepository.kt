@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
  * Repository that provides insert, update, delete, and retrieve of [Item] from a given data source.
  */
 interface PractiseSessionTasksRepository {
+    fun getPracticeSessionTaskBySessionIdAndTaskId(sessionId: Int, taskId: Int): Flow<PractiseSessionTask>
     /**
      * Retrieve all the PractiseSessions from the the given data source.
      */

@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,18 +25,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import burt.music.practiseworks.ui.navigation.NavigationDestination
 import burt.music.practiseworks.ui.PractiseWorksTopAppBar
 import burt.music.practiseworks.data.Task
+import burt.music.practiseworks.data.TaskPlusCompleted
 import burt.music.practiseworks.ui.AppViewModelProvider
 import burt.music.practiseworks.ui.home.HomeDestination
 import burt.music.practiseworks.ui.task.TaskTypes
+import burt.music.practiseworks.ui.task.WarmupDetailsDestination
 import burt.music.practiseworks.ui.theme.PractiseWorksTheme
 import com.example.practiseworks.R
 
 object TaskListDestination : NavigationDestination {
     override val route = "task_list"
     override val titleRes = R.string.app_name
+    const val sessionIdArg = "sessionId"
+    const val typeArg = "type"
+    val routeWithArgs = "$route/{$sessionIdArg}/{$typeArg}"
 }
 
 /**
@@ -42,8 +50,9 @@ object TaskListDestination : NavigationDestination {
  */
 @Composable
 fun TaskListScreen(
-    navigateToTaskUpdate: (Int) -> Unit,
+    navController: NavController,
     modifier: Modifier = Modifier,
+    onNavigateBack: () -> Unit,
     viewModel: TaskListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val taskListUiState by viewModel.taskListUiState.collectAsState()
@@ -51,21 +60,45 @@ fun TaskListScreen(
         topBar = {
             PractiseWorksTopAppBar(
                 title = stringResource(HomeDestination.titleRes),
-                canNavigateBack = false
+                canNavigateBack = true,
+                navigateUp = onNavigateBack
             )
         },
     ) { innerPadding ->
-        TaskListBody(
-            taskList = taskListUiState.taskList,
-            onItemClick = navigateToTaskUpdate,
-            modifier = modifier.padding(innerPadding)
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.Center
+        ) {
+            OutlinedCard(
+                elevation = CardDefaults.cardElevation(),
+                colors = CardDefaults.cardColors(),
+                modifier = Modifier.fillMaxSize()
+                    .padding(10.dp)
+            ) {
+                TaskListBody(
+                    taskList = taskListUiState.taskList,
+                    onItemClick = {
+                        if (viewModel.getType() == "warmup") {
+                            navController.navigate("${WarmupDetailsDestination.route}/${viewModel.getPractiseSessionId()}/$it")
+                        } else if (viewModel.getType() == "exercise") {
+                            // navController.navigate("${ExerciseDetailsDestination.route}/${viewModel.getPractiseSessionId()}/$it")
+                        } else if (viewModel.getType() == "piece") {
+                            // navigate to piece screen
+                        }
+                    },
+                    modifier = modifier.padding(innerPadding)
+                )
+            }
+        }
+        viewModel.printLogs()
     }
 }
 
 @Composable
 private fun TaskListBody(
-    taskList: List<Task>,
+    taskList: List<TaskPlusCompleted>,
     onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -90,8 +123,8 @@ private fun TaskListBody(
 
 @Composable
 private fun PractiseWorksTaskList(
-    taskList: List<Task>,
-    onItemClick: (Task) -> Unit,
+    taskList: List<TaskPlusCompleted>,
+    onItemClick: (TaskPlusCompleted) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -117,8 +150,8 @@ private fun PractiseWorksListHeader(modifier: Modifier = Modifier) {
 
 @Composable
 private fun PractiseWorksTask(
-    task: Task,
-    onItemClick: (Task) -> Unit,
+    task: TaskPlusCompleted,
+    onItemClick: (TaskPlusCompleted) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -130,7 +163,9 @@ private fun PractiseWorksTask(
             .clickable { onItemClick(task) }
             .padding(vertical = 16.dp)
         ) {
-            taskIcon(R.drawable.task_icon)
+            taskIcon(
+                R.drawable.task_icon,
+                task.completed)
             Text(
                 text = task.title,
                 modifier = Modifier.weight(1.5f),
@@ -147,7 +182,9 @@ private fun PractiseWorksTask(
  * @param modifier modifiers to set to this composable
  */
 @Composable
-fun taskIcon(@DrawableRes taskIcon: Int, modifier: Modifier = Modifier) {
+fun taskIcon(@DrawableRes taskIcon: Int,
+             completed: Boolean,
+             modifier: Modifier = Modifier) {
     Image(
         modifier = modifier
             .size(64.dp)
@@ -161,6 +198,11 @@ fun taskIcon(@DrawableRes taskIcon: Int, modifier: Modifier = Modifier) {
          */
         contentDescription = null
     )
+    if (completed) {
+        Text(
+            text = "Complete!"
+        )
+    }
 }
 
 private data class PractiseWorksHeader(@StringRes val headerStringId: Int, val weight: Float)
@@ -175,9 +217,9 @@ fun TaskListScreenRoutePreview() {
     PractiseWorksTheme {
         TaskListBody(
             listOf(
-                Task(1, "", 100, TaskTypes.WARMUP.string, "Play it right", true, "Again: lower your wrist."),
-                Task(2, "Pen", 100, TaskTypes.WARMUP.string, "And close it", true, "And open it"),
-                Task(3, "TV", 100, TaskTypes.WARMUP.string, "C major scale.", true, "1,2,3,1,2,3,4,5")
+                TaskPlusCompleted(1, "", 100, TaskTypes.WARMUP.string, "Play it right", true, "Again: lower your wrist.", true),
+                TaskPlusCompleted(2, "Pen", 100, TaskTypes.WARMUP.string, "And close it", true, "And open it", false),
+                TaskPlusCompleted(3, "TV", 100, TaskTypes.WARMUP.string, "C major scale.", true, "1,2,3,1,2,3,4,5", true)
             ),
             onItemClick = {}
         )

@@ -10,6 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,12 +22,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontSynthesis.Companion.Weight
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import burt.music.practiseworks.ui.navigation.NavigationDestination
@@ -39,6 +46,8 @@ import com.example.practiseworks.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.JdkConstants.FontStyle
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.text.NumberFormat
 import java.util.*
 
@@ -82,10 +91,13 @@ fun WelcomeScreen(
 //        },
     ) { innerPadding ->
         Column(
-            modifier = Modifier.border(BorderStroke(2.dp, Color.Gray)).fillMaxSize()
+            modifier = Modifier
+                .border(BorderStroke(2.dp, Color.Gray))
+                .fillMaxSize()
         ) {
             Box(
-                modifier = modifier.padding(innerPadding)
+                modifier = modifier
+                    .padding(innerPadding)
                     .fillMaxWidth()
                     .weight(1f),
                 contentAlignment = Alignment.TopCenter
@@ -98,7 +110,8 @@ fun WelcomeScreen(
                 )
             }
             Box(
-                modifier = modifier.padding(innerPadding)
+                modifier = modifier
+                    .padding(innerPadding)
                     .fillMaxWidth()
                     .weight(1f),
                 contentAlignment = Alignment.TopCenter
@@ -188,21 +201,50 @@ private fun statisticsDisplay(
     modifier: Modifier = Modifier,
     onNewPractiseClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
+    OutlinedCard(
+        elevation = CardDefaults.cardElevation(),
+        colors = CardDefaults.cardColors(),
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            text = student.f_name + " " + student.l_name
-        )
-        Text(
-            text = student.username
-        )
-        Text(
-            text = "Lesson Details:"
-        )
-        Text(
-            text = student.lesson_day + " " + student.lesson_time
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val padding = 10.dp
+            Row() {
+                Text(
+                    text = "Name: ",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = student.f_name + " " + student.l_name
+                )
+            }
+            Spacer(Modifier.size(padding))
+            Row() {
+                Text(
+                    text = "username: ",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = student.username
+                )
+            }
+            Spacer(Modifier.size(padding))
+            Text(
+                text = "Lesson Details:",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = student.lesson_day + " " + student.lesson_time
+            )
+            Spacer(Modifier.size(padding))
+        }
     }
 }
 
@@ -213,35 +255,57 @@ private fun WelcomeButtons(
     onGenerateTasks: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(12.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        Card() {
+        OutlinedCard(
+            elevation = CardDefaults.cardElevation(),
+            colors = CardDefaults.cardColors()
+        ) {
+            val padding = 24.dp
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                horizontalAlignment = Alignment.CenterHorizontally
+
             ) {
                 Button(
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = onNewPractiseClick,
                     colors = ButtonDefaults.buttonColors()
+
                 ) {
                     Text(
-                        text = "Start New Practise!", color = Color.White
+                        text = "Start New Practise!",
+                        color = Color.White,
+                        fontSize = 20.sp
                     )
                 }
+                Spacer(Modifier.size(padding))
                 Button(
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = { },
                     colors = ButtonDefaults.buttonColors(),
                 ) {
                     Text(
-                        text = "Explore", color = Color.White
+                        text = "Explore",
+                        color = Color.White,
+                        fontSize = 20.sp
                     )
                 }
+                Spacer(Modifier.size(padding))
                 Button(
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = onGenerateTasks,
                     colors = ButtonDefaults.buttonColors(),
                 ) {
                     Text(
-                        text = "Generate Tasks in Database", color = Color.White
+                        text = "Generate Tasks in Database",
+                        color = Color.White,
+                        fontSize = 20.sp
                     )
                 }
             }

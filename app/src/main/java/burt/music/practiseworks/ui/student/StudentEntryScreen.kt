@@ -19,7 +19,9 @@ package burt.music.practiseworks.ui.student
 // Date entry box imports for material 3
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -82,11 +84,13 @@ fun StudentEntryBody(
     onStudentValueChange: (StudentUiState) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
+
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         StudentInputForm(studentUiState = studentUiState, onValueChange = onStudentValueChange)

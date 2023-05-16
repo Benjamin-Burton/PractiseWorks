@@ -19,6 +19,8 @@ package burt.music.practiseworks.data
 import kotlinx.coroutines.flow.Flow
 
 class OfflinePractiseSessionTasksRepository(private val practiseSessionTaskDao: PractiseSessionTaskDao) : PractiseSessionTasksRepository {
+
+    override fun getPracticeSessionTaskBySessionIdAndTaskId(sessionId: Int, taskId: Int): Flow<PractiseSessionTask> = practiseSessionTaskDao.getPracticeSessionTaskBySessionIdAndTaskId(sessionId, taskId)
     override fun getPractiseSessionTasksByTypeAndSessionIdStream(type: String, id: Int): Flow<List<PractiseSessionTask>> = practiseSessionTaskDao.getPractiseSessionTasksByTypeAndSessionId(type, id)
 
     override fun getPractiseSessionTasksBySessionIdStream(practiseSessionId: Int): Flow<List<PractiseSessionTask>> = practiseSessionTaskDao.getPractiseSessionTasksBySessionId(practiseSessionId)

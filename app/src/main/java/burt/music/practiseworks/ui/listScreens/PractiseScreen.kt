@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,11 +16,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontSynthesis.Companion.Weight
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import burt.music.practiseworks.data.PractiseSessionTypeNumCompleted
 import burt.music.practiseworks.ui.navigation.NavigationDestination
@@ -47,6 +53,7 @@ object PractiseScreenDestination : NavigationDestination {
 fun PractiseScreen(
     onNavigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
+    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: PractiseScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -58,38 +65,59 @@ fun PractiseScreen(
         topBar = {
             PractiseWorksTopAppBar(
                 title = stringResource(HomeDestination.titleRes),
-                canNavigateBack = false
+                canNavigateBack = true,
+                navigateUp = onNavigateBack
             )
         },
+        bottomBar = {
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        viewModel.endSession()
+                        onNavigateBack()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+                ) {
+                Text(
+                    text = "End Practise Session",
+                    fontSize = 20.sp
+                )
+            }
+        }
     ) { innerPadding ->
         // what we need is a button for each task type,
         // and a number of those tasks
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.Center
         ) {
-            for (practiseType in practiseScreenTypesState.practiseTypes) {
-                Log.e("BEN", "${practiseType.type} ${practiseType.numCompleted}")
-                TaskTypeButton(
-                    taskType = TaskTypes.valueOf(practiseType.type.uppercase()),
-                    numberInSession = practiseType.numTotal,
-                    numberComplete = (practiseScreenNumCompletedTasksUiState.practiseList.firstOrNull() {it.type == practiseType.type}?.numCompleted
-                        ?: 0),
-                    onTaskTypeClick = { /*TODO*/ })
-            }
-            Text(
-                text = "     "
-            )
-            Button(
-                onClick = {
-                    viewModel.endSession()
-                    onNavigateBack()
-                }
+            OutlinedCard(
+                elevation = CardDefaults.cardElevation(),
+                colors = CardDefaults.cardColors(),
+                modifier = Modifier.fillMaxSize()
+                    .padding(10.dp)
             ) {
-                Text(
-                    text = "End Practise Session"
-                )
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp)) {
+
+                    for (practiseType in practiseScreenTypesState.practiseTypes) {
+                        TaskTypeButton(
+                            taskType = TaskTypes.valueOf(practiseType.type.uppercase()),
+                            numberInSession = practiseType.numTotal,
+                            numberComplete = (practiseScreenNumCompletedTasksUiState.practiseList.firstOrNull() {it.type == practiseType.type}?.numCompleted
+                                ?: 0),
+                            onTaskTypeClick = {
+                                navController.navigate("${TaskListDestination.route}/${viewModel.getPractiseSessionId()}/${practiseType.type}")
+                            })
+                        Spacer(Modifier.size(16.dp))
+                    }
+                    Spacer(Modifier.size(16.dp))
+
+                }
             }
         }
 
@@ -111,10 +139,12 @@ private fun TaskTypeButton(
 ) {
     Button(
             onClick = onTaskTypeClick,
-            colors = ButtonDefaults.buttonColors()
+            colors = ButtonDefaults.buttonColors(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "${taskType.string} ${numberComplete.toString()} / ${numberInSession.toString()}", color = Color.White
+                text = "${taskType.string.replaceFirstChar { it.uppercaseChar() }}s ${numberComplete.toString()} / ${numberInSession.toString()}", color = Color.White,
+                fontSize = 20.sp
             )
         }
 //        PractiseWorksListHeader()
@@ -128,58 +158,59 @@ private fun TaskTypeButton(
 //            PractiseWorksTaskList(taskList = taskList, onItemClick = { onItemClick(it.id) })
 //        }
 }
-
-@Composable
-private fun PractiseWorksTaskList(
-    taskList: List<Task>,
-    onItemClick: (Task) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(items = taskList, key = { it.id }) { task ->
-            PractiseWorksTask(task = task, onItemClick = onItemClick)
-            Divider()
-        }
-    }
-}
-
+//
 //@Composable
-//private fun PractiseWorksListHeader(modifier: Modifier = Modifier) {
-//    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-//        headerList.forEach {
+//private fun PractiseWorksTaskList(
+//    taskList: List<Task>,
+//    onItemClick: (Task) -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+//        items(items = taskList, key = { it.id }) { task ->
+//            PractiseWorksTask(task = task, onItemClick = onItemClick)
+//            Divider()
+//        }
+//    }
+//}
+//
+////@Composable
+////private fun PractiseWorksListHeader(modifier: Modifier = Modifier) {
+////    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+////        headerList.forEach {
+////            Text(
+////                text = stringResource(it.headerStringId),
+////                modifier = Modifier.weight(it.weight),
+////                style = MaterialTheme.typography.h6
+////            )
+////        }
+////    }
+////}
+//
+//@Composable
+//private fun PractiseWorksTask(
+//    task: Task,
+//    onItemClick: (Task) -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    Card(
+//        modifier = modifier.padding(8.dp),
+//        elevation = 4.dp
+//    ) {
+//        Row(modifier = modifier
+//            .fillMaxWidth()
+//            .clickable { onItemClick(task) }
+//            .padding(vertical = 16.dp)
+//        ) {
+//            taskIcon(R.drawable.task_icon,
+//                completed = true)
 //            Text(
-//                text = stringResource(it.headerStringId),
-//                modifier = Modifier.weight(it.weight),
-//                style = MaterialTheme.typography.h6
+//                text = task.title,
+//                modifier = Modifier.weight(1.5f),
+//                fontWeight = FontWeight.Bold
 //            )
 //        }
 //    }
 //}
-
-@Composable
-private fun PractiseWorksTask(
-    task: Task,
-    onItemClick: (Task) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.padding(8.dp),
-        elevation = 4.dp
-    ) {
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .clickable { onItemClick(task) }
-            .padding(vertical = 16.dp)
-        ) {
-            taskIcon(R.drawable.task_icon)
-            Text(
-                text = task.title,
-                modifier = Modifier.weight(1.5f),
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
 
 
 @Preview(showBackground = true)

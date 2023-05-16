@@ -43,3 +43,14 @@ data class TaskNumInfo(
     val type: String,
     val count: Int
 )
+
+data class TaskPlusCompleted(
+    val id: Int = 0,
+    val title: String,
+    var student_id: Int,
+    val type: String, // WARMUP/EXERCISE/PIECE
+    val instructions: String,
+    val current: Boolean,
+    val cues: String,
+    val completed: Boolean
+)

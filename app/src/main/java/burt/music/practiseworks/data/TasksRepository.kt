@@ -32,6 +32,7 @@ interface TasksRepository {
      */
     fun getTaskStream(id: Int): Flow<Task?>
 
+    fun getTaskPlusCompletedStream(id: Int, sessionId: Int): Flow<TaskPlusCompleted?>
     /**
      * Insert Task in the data source
      */
@@ -57,4 +58,7 @@ interface TasksRepository {
     fun getNumTasksByType(type: String): Int
 
     fun getAllCurrentTasksStream(): Flow<List<Task>>
+    // note this requires a join
+    fun getTasksByTypeAndSessionId(sessionId: Int, type: String): Flow<List<Task>>
+    fun getTasksPlusCompletedByTypeAndSessionId(sessionId: Int, type: String): Flow<List<TaskPlusCompleted>>
 }

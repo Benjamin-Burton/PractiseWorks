@@ -60,22 +60,24 @@ class PractiseScreenViewModel(
         return tasksRepository.getNumTasksByType(practiseType)
     }
 
+    fun getPractiseSessionId(): Int {
+        return practiseSessionId
+    }
+
     fun getNumInSession(practiseType: String): Int {
         return tasksRepository.getNumTasksByType(practiseType)
     }
 
-    fun endSession() {
-        viewModelScope.launch {
-            var ps = practiseSessionsRepository.getPractiseSessionStream(practiseSessionId).first()
-            practiseSessionsRepository.updatePractiseSession(
-                PractiseSession(
-                    id = ps.id,
-                    student_id = ps.student_id,
-                    start_date = ps.start_date,
-                    end_date = Date()
-                )
+    suspend fun endSession() {
+        var ps = practiseSessionsRepository.getPractiseSessionStream(practiseSessionId).first()
+        practiseSessionsRepository.updatePractiseSession(
+            PractiseSession(
+                id = ps.id,
+                student_id = ps.student_id,
+                start_date = ps.start_date,
+                end_date = Date()
             )
-        }
+        )
     }
 
     companion object {

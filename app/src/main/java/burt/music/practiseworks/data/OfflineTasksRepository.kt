@@ -25,6 +25,7 @@ class OfflineTasksRepository(private val taskDao: TaskDao) : TasksRepository {
 
     override fun getTaskStream(id: Int): Flow<Task?> = taskDao.getTask(id)
 
+    override fun getTaskPlusCompletedStream(id: Int, sessionId: Int): Flow<TaskPlusCompleted?> = taskDao.getTaskPlusCompleted(id, sessionId)
     override fun getAllTasksByTypeStream(type: String): Flow<List<Task>> =
         taskDao.getTasksByType(type)
 
@@ -33,6 +34,12 @@ class OfflineTasksRepository(private val taskDao: TaskDao) : TasksRepository {
 
     override fun getNumTasksByType(type: String) =
         taskDao.getNumTasksByType(type)
+
+    override fun getTasksByTypeAndSessionId(sessionId: Int, type: String): Flow<List<Task>> =
+        taskDao.getTasksByTypeAndSessionId(sessionId, type)
+
+    override fun getTasksPlusCompletedByTypeAndSessionId(sessionId: Int, type: String): Flow<List<TaskPlusCompleted>> =
+        taskDao.getTasksPlusCompletedByTypeAndSessionId(sessionId, type)
 
     override suspend fun insertTask(task: Task) = taskDao.insert(task)
 

@@ -16,6 +16,9 @@
 
 package burt.music.practiseworks.ui.listScreens
 
+import TaskListUiState
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import burt.music.practiseworks.data.Task
@@ -29,9 +32,15 @@ import kotlinx.coroutines.flow.stateIn
 /**
  * View Model to retrieve all items in the Room database.
  */
-class TaskListViewModel(tasksRepository: TasksRepository) : ViewModel() {
+class TaskListViewModel(
+    savedStateHandle: SavedStateHandle,
+    tasksRepository: TasksRepository) : ViewModel() {
+    private val practiseSessionId: Int = checkNotNull(savedStateHandle[TaskListDestination.sessionIdArg])
+    private val type: String = checkNotNull(savedStateHandle[TaskListDestination.typeArg])
+
+
     val taskListUiState: StateFlow<TaskListUiState> =
-        tasksRepository.getAllTasksStream().map { TaskListUiState(it) }
+        tasksRepository.getTasksPlusCompletedByTypeAndSessionId(practiseSessionId, type).map { TaskListUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -40,9 +49,21 @@ class TaskListViewModel(tasksRepository: TasksRepository) : ViewModel() {
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
+
+    fun printLogs() {
+        Log.e("BEN2", practiseSessionId.toString())
+        Log.e("BEN2", type)
+    }
+
+    fun getType(): String {
+        return type
+    }
+
+    fun getPractiseSessionId(): Int {
+        return practiseSessionId
+    }
 }
 
 /**
  * Ui State for TaskListScreen
  */
-data class TaskListUiState(val taskList: List<Task> = listOf())

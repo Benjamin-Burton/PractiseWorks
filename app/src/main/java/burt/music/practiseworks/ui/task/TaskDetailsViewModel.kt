@@ -18,16 +18,20 @@ package burt.music.practiseworks.ui.task
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import burt.music.practiseworks.data.PractiseSessionTasksRepository
+import burt.music.practiseworks.data.TasksRepository
 import burt.music.practiseworks.ui.item.ItemDetailsDestination
 
 /**
  * ViewModel to retrieve, update and delete a task from the data source.
  */
 class TaskDetailsViewModel(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val tasksRepository: TasksRepository
 ) : ViewModel() {
 
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
+
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L

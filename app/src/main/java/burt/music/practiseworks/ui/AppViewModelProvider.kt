@@ -32,6 +32,7 @@ import burt.music.practiseworks.ui.listScreens.PractiseScreenViewModel
 import burt.music.practiseworks.ui.student.StudentEntryViewModel
 import burt.music.practiseworks.ui.task.TaskDetailsViewModel
 import burt.music.practiseworks.ui.task.TaskEntryViewModel
+import burt.music.practiseworks.ui.task.WarmupDetailsViewModel
 import burt.music.practiseworks.ui.welcome.WelcomeViewModel
 
 
@@ -69,7 +70,8 @@ object AppViewModelProvider {
 
         // Initializer for TaskDetailsViewModel
         initializer {
-            TaskDetailsViewModel(this.createSavedStateHandle())
+            TaskDetailsViewModel(this.createSavedStateHandle(),
+            practiseWorksApplication().container.tasksRepository)
         }
 
         // Initializer for TaskEntryViewModel
@@ -79,7 +81,9 @@ object AppViewModelProvider {
 
         // Initializer for TaskListViewModel
         initializer {
-            TaskListViewModel(practiseWorksApplication().container.tasksRepository)
+            TaskListViewModel(
+                this.createSavedStateHandle(),
+                practiseWorksApplication().container.tasksRepository)
         }
 
         // Initializer for StudentEntryViewModel
@@ -103,6 +107,14 @@ object AppViewModelProvider {
                 practiseWorksApplication().container.tasksRepository,
                 practiseWorksApplication().container.practiseSessionsRepository,
                 practiseWorksApplication().container.practiseSessionTasksRepository)
+        }
+
+        initializer {
+            WarmupDetailsViewModel(
+                this.createSavedStateHandle(),
+                practiseWorksApplication().container.tasksRepository,
+                practiseWorksApplication().container.practiseSessionTasksRepository
+            )
         }
     }
 }

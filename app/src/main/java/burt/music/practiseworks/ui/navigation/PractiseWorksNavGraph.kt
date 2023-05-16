@@ -16,6 +16,7 @@
 
 package burt.music.practiseworks.ui.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -34,6 +35,8 @@ import burt.music.practiseworks.ui.student.StudentEntryDestination
 import burt.music.practiseworks.ui.student.StudentEntryScreen
 import burt.music.practiseworks.ui.task.TaskEntryDestination
 import burt.music.practiseworks.ui.task.TaskEntryScreen
+import burt.music.practiseworks.ui.task.WarmupDetailsDestination
+import burt.music.practiseworks.ui.task.WarmupDetailsScreen
 import burt.music.practiseworks.ui.welcome.WelcomeDestination
 import burt.music.practiseworks.ui.welcome.WelcomeScreen
 
@@ -94,11 +97,15 @@ fun PractiseWorksNavHost(
                 onNavigateUp = { navController.navigateUp() })
         }
         composable(
-            route = TaskListDestination.route
+            route = TaskListDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(TaskListDestination.sessionIdArg) { type = NavType.IntType },
+                navArgument(TaskListDestination.typeArg) { type = NavType.StringType }
+            )
         ) {
             TaskListScreen(
-                navigateToTaskUpdate = {
-                    navController.navigate("${ItemDetailsDestination.route}/${it}")}
+                navController = navController,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
         composable(
@@ -115,6 +122,7 @@ fun PractiseWorksNavHost(
             })
         ) {
             PractiseScreen(
+                navController = navController,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() },
             )
@@ -128,6 +136,18 @@ fun PractiseWorksNavHost(
                 navigateToNewPractiseSession = {
                     navController.navigate("${PractiseScreenDestination.route}/${it}")
                 }
+            )
+        }
+        composable(
+            route = WarmupDetailsDestination.routeWithArgs,
+            arguments = listOf(navArgument(WarmupDetailsDestination.taskIdArg) {
+                type = NavType.IntType },
+                navArgument(WarmupDetailsDestination.sessionArg) {
+                    type = NavType.IntType
+            })
+        ) {
+            WarmupDetailsScreen(navigateBack = { navController.popBackStack() },
+                onCompleteWarmup = {  },
             )
         }
     }
