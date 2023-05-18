@@ -30,6 +30,7 @@ import burt.music.practiseworks.ui.item.ItemEntryViewModel
 import burt.music.practiseworks.ui.home.HomeViewModel
 import burt.music.practiseworks.ui.listScreens.PractiseScreenViewModel
 import burt.music.practiseworks.ui.student.StudentEntryViewModel
+import burt.music.practiseworks.ui.task.PieceDetailsViewModel
 import burt.music.practiseworks.ui.task.TaskDetailsViewModel
 import burt.music.practiseworks.ui.task.TaskEntryViewModel
 import burt.music.practiseworks.ui.task.WarmupDetailsViewModel
@@ -111,6 +112,14 @@ object AppViewModelProvider {
 
         initializer {
             WarmupDetailsViewModel(
+                this.createSavedStateHandle(),
+                practiseWorksApplication().container.tasksRepository,
+                practiseWorksApplication().container.practiseSessionTasksRepository
+            )
+        }
+
+        initializer {
+            PieceDetailsViewModel(
                 this.createSavedStateHandle(),
                 practiseWorksApplication().container.tasksRepository,
                 practiseWorksApplication().container.practiseSessionTasksRepository

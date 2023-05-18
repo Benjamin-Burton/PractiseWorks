@@ -33,10 +33,7 @@ import burt.music.practiseworks.ui.listScreens.TaskListDestination
 import burt.music.practiseworks.ui.listScreens.TaskListScreen
 import burt.music.practiseworks.ui.student.StudentEntryDestination
 import burt.music.practiseworks.ui.student.StudentEntryScreen
-import burt.music.practiseworks.ui.task.TaskEntryDestination
-import burt.music.practiseworks.ui.task.TaskEntryScreen
-import burt.music.practiseworks.ui.task.WarmupDetailsDestination
-import burt.music.practiseworks.ui.task.WarmupDetailsScreen
+import burt.music.practiseworks.ui.task.*
 import burt.music.practiseworks.ui.welcome.WelcomeDestination
 import burt.music.practiseworks.ui.welcome.WelcomeScreen
 
@@ -147,6 +144,18 @@ fun PractiseWorksNavHost(
             })
         ) {
             WarmupDetailsScreen(navigateBack = { navController.popBackStack() },
+                onCompleteWarmup = {  },
+            )
+        }
+        composable(
+            route = PieceDetailsDestination.routeWithArgs,
+            arguments = listOf(navArgument(WarmupDetailsDestination.taskIdArg) {
+                type = NavType.IntType },
+                navArgument(WarmupDetailsDestination.sessionArg) {
+                    type = NavType.IntType
+                })
+        ) {
+            PieceDetailsScreen(navigateBack = { navController.popBackStack() },
                 onCompleteWarmup = {  },
             )
         }

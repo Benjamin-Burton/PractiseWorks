@@ -23,6 +23,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -97,7 +98,8 @@ fun PractiseScreen(
             OutlinedCard(
                 elevation = CardDefaults.cardElevation(),
                 colors = CardDefaults.cardColors(),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(10.dp)
             ) {
                 Column(modifier = Modifier
@@ -121,12 +123,42 @@ fun PractiseScreen(
             }
         }
 
+//        var allDone = true
+//        for (practiseType in practiseScreenTypesState.practiseTypes) {
+//            if (practiseType.numTotal != practiseType.numCompleted) {
+//                allDone = false
+//                Log.e("BEN","here i sit")
+//            }
+//        }
+//        if (allDone) {
+//            PractiseCompleteConfirmationDialog(
+//                onNavigateBack = onNavigateBack
+//            )
+//        }
+
 //        TaskListBody(
 //            taskList = practiseScreenUiState.taskList,
 //            onItemClick = navigateToTaskUpdate,
 //            modifier = modifier.padding(innerPadding)
 //        )
     }
+}
+
+@Composable
+private fun PractiseCompleteConfirmationDialog(
+    modifier: Modifier = Modifier,
+    onNavigateBack: () -> Unit,
+) {
+    Dialog(
+        onDismissRequest = {
+            onNavigateBack
+        },
+        content = {
+            Text(
+                text = "Well done, practise complete!"
+            )
+        }
+    )
 }
 
 @Composable

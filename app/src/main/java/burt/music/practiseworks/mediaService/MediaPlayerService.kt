@@ -6,6 +6,7 @@ import android.content.res.AssetManager
 import android.content.res.Resources
 import android.media.MediaPlayer
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,11 +16,10 @@ import kotlinx.coroutines.delay
 import java.io.File
 
 class MediaPlayerService (
-    val filename: String = "",
     val mContext: Context,
 ) {
-    val afd: AssetFileDescriptor = mContext.assets.openFd(filename)
-    val mMediaPlayer = MediaPlayer()
+
+    private val mMediaPlayer = MediaPlayer()
     var playing by mutableStateOf(false)
         private set
     var paused by mutableStateOf(false)
@@ -35,11 +35,19 @@ class MediaPlayerService (
     val getIsStopped: Boolean
         get() = stopped
 
-    init {
-        mMediaPlayer.setDataSource(afd)
+    suspend fun play(filename: String) {
+        Log.e("BEN4", filename)
+        if (paused) {
+            mMediaPlayer.start()
+            playing = true
+            paused = false
+            stopped = false
+            return
+        }
+        // if stopped
+        mMediaPlayer.reset()
+        mMediaPlayer.setDataSource(mContext.assets.openFd(filename))
         mMediaPlayer.prepare()
-    }
-    suspend fun play() {
         playing = true
         paused = false
         stopped = false
@@ -57,7 +65,11 @@ class MediaPlayerService (
      * Regardless of the value of [initialProgress] the reset function will reset the
      * [currentProgress] to 0
      */
-    fun stop() {
+    fun stop(filename: String) {
+        if (stopped) {
+            return
+        }
+
         playing = false
         paused = false
         stopped = true

@@ -32,6 +32,7 @@ data class WarmupUiState(
     val current: Boolean = false,
     val cues: String = "",
     val actionEnabled: Boolean = false,
+    val track_filename: String = ""
 )
 
 /**
@@ -46,7 +47,8 @@ fun WarmupUiState.toTask(): Task = Task(
     type = type.string,
     instructions = instructions,
     current = current,
-    cues = cues
+    cues = cues,
+    track_filename = track_filename
 )
 
 /**
@@ -60,6 +62,7 @@ fun Task.toWarmupUiState(): WarmupUiState = WarmupUiState(
     instructions = instructions,
     current = current,
     cues = cues,
+    track_filename = track_filename
 )
 
 fun WarmupUiState.isValid() : Boolean {

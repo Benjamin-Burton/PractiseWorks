@@ -75,62 +75,112 @@ class WelcomeViewModel(
     suspend fun createTasks() {
         tasksRepository.insertTask(
             Task(
-                title = "C Major Scale",
-                student_id = 1,
-                type = TaskTypes.EXERCISE.string,
-                instructions = "Play a c major scale with the right hand.",
-                current = true,
-                cues = "Keep your wrist low."
-            )
-        )
-        tasksRepository.insertTask(
-            Task(
-                title = "C Major Scale",
-                student_id = 1,
-                type = TaskTypes.EXERCISE.string,
-                instructions = "Play a c major scale with the left hand.",
-                current = true,
-                cues = "Remember the fingering!"
-            )
-        )
-        tasksRepository.insertTask(
-            Task(
-                title = "Arm swings",
+                title = "Exercise 1 - ng",
                 student_id = 1,
                 type = TaskTypes.WARMUP.string,
-                instructions = "Play white and black clusters with 2-3-4",
+                instructions = "Glissando over an octave on the sound 'ng'",
                 current = true,
-                cues = "Make nice big movements from the shoulder."
+                cues = "Release the jaw.\nSlide very slowly between notes.",
+                track_filename = "exercise_1_ng.mp3"
             )
         )
         tasksRepository.insertTask(
             Task(
-                title = "Shoulder raises",
+                title = "Exercise 2 - 5-note scale",
                 student_id = 1,
                 type = TaskTypes.WARMUP.string,
-                instructions = "Raise your shoulders up to your ears.",
+                instructions = "Sing the five Italian vowels on a 5-note scale.\n",
                 current = true,
-                cues = "Repeat 10 times."
+                cues = "Place the tongue forward.\nRemember the tip of the tongue should be just behind the bottom teeth.",
+                track_filename = "exercise_2_5_note_scale.mp3"
             )
         )
         tasksRepository.insertTask(
             Task(
-                title = "Prelude for small cat.",
+                title = "Exercise 3 - Major Triad",
+                student_id = 1,
+                type = TaskTypes.WARMUP.string,
+                instructions = "Singing on the Italian Vowels, moving higher this time.",
+                current = true,
+                cues = "As the sound moves higher, use extra support.\nRemember to think 'up and over' as the exercise moves higher.",
+                track_filename = "exercise_3_major_triad.mp3"
+            )
+        )
+        tasksRepository.insertTask(
+            Task(
+                title = "Exercise 4 - Scale in Thirds",
+                student_id = 1,
+                type = TaskTypes.WARMUP.string,
+                instructions = "Now it's time to check the posture.\nCheck for tension.\nMake sure you are relaxed.",
+                current = true,
+                cues = "We are still in the mid voice - not maximum energy yet.\nKeep the tongue forward and behind the front teeth",
+                track_filename = "exercise_4_scale_in_3rds.mp3"
+            )
+        )
+        tasksRepository.insertTask(
+            Task(
+                title = "Exercise 5 - 9-note scale",
+                student_id = 1,
+                type = TaskTypes.WARMUP.string,
+                instructions = "We now move higher. As you get to the top of this scale, you'll need to engage your support.\nWe still use the Italian vowels.",
+                current = true,
+                cues = "As you get higher, you'll need to modify the vowel.\nDrop the jaw.\nKeep the tongue in a relaxed position.\nKeep the tongue forward.",
+                track_filename = "exercise_5_9_note_scale.mp3"
+            )
+        )
+        tasksRepository.insertTask(
+            Task(
+                title = "Exercise 6 - Major Arpeggio",
+                student_id = 1,
+                type = TaskTypes.WARMUP.string,
+                instructions = "We are now moving into the top range of the voice.\nStill using all Italian vowels, starting with 'mi'",
+                current = true,
+                cues = "Lots of support is required.\nGood placement.\nRelease when you take the breath.",
+                track_filename = "exercise_6_major_arpeggio.mp3"
+            )
+        )
+        tasksRepository.insertTask(
+            Task(
+                title = "Exercise 7 - Scales in Thirds",
+                student_id = 1,
+                type = TaskTypes.WARMUP.string,
+                instructions = "Scales in thirds over the full major tenth.\nStarting with 'me-ah'",
+                current = true,
+                cues = "Make sure:\nThinking up and over.\nGood release when you take the breath!",
+                track_filename = "exercise_7_scales_in_thirds.mp3"
+            )
+        )
+        tasksRepository.insertTask(
+            Task(
+                title = "Standchen",
                 student_id = 1,
                 type = TaskTypes.PIECE.string,
-                instructions = "A cute little piece with a big heart.",
+                instructions = "A famous and beautiful serenade by Franz Schubert.",
                 current = true,
-                cues = "Keep your wrist low."
+                cues = "Refer to the resources for German pronunciation guide.",
+                track_filename = "standchen_piano.mp3"
             )
         )
         tasksRepository.insertTask(
             Task(
-                title = "Prelude in F Major",
+                title = "Take the A-train",
                 student_id = 1,
-                type = TaskTypes.EXERCISE.string,
-                instructions = "An unlikely key for a charming song.",
+                type = TaskTypes.PIECE.string,
+                instructions = "What a banger! Practise hard to sound like ELla :)",
                 current = true,
-                cues = "Keep focussed on the rhythm."
+                cues = "If you aren't having fun, neither is your audience.",
+                track_filename = "take_the_a_train.mp3"
+            )
+        )
+        tasksRepository.insertTask(
+            Task(
+                title = "I'm beginning to see the light.",
+                student_id = 1,
+                type = TaskTypes.PIECE.string,
+                instructions = "I'm beginning to see the light.",
+                current = true,
+                cues = "Just keep singing it through. Focus on memorising the words.",
+                track_filename = "beginning_to_see_the_light_backing_1.mp3"
             )
         )
     }

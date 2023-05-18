@@ -61,21 +61,21 @@ fun WarmupDetailsScreen(
     val warmUpUiState by viewModel.uiState.collectAsState()
     val practiseSessionTaskUiState by viewModel.uiStatePractiseSessionTask.collectAsState()
     var metronomeOrMedia by remember {
-        mutableStateOf(true) // true = metronome
+        mutableStateOf(false) // true = metronome, false = media player
     }
 
     val metronome by remember { mutableStateOf(MetronomeService(
             mContext = context
         ))
     }
+
     val mediaPlayer by remember {
         mutableStateOf(MediaPlayerService(
             mContext = context,
-            filename = "exercise_1_ng.mp3"
         ))
     }
     BackHandler {
-        mediaPlayer.stop()
+        mediaPlayer.stop(filename = warmUpUiState.track_filename)
         metronome.reset()
         navigateBack()
     }
@@ -86,14 +86,15 @@ fun WarmupDetailsScreen(
                 title = stringResource(WarmupDetailsDestination.titleRes),
                 canNavigateBack = true,
                 navigateUp = {
-                    mediaPlayer.stop()
+                    mediaPlayer.stop(filename = warmUpUiState.track_filename)
                     navigateBack()
                 }
             )
         },
         bottomBar = {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .height(60.dp)
             ) {
                 if (metronomeOrMedia) {
@@ -110,9 +111,10 @@ fun WarmupDetailsScreen(
                         mediaPlayer,
                         coroutineScope,
                         onChange = {
-                            mediaPlayer.stop()
+                            mediaPlayer.stop(filename = warmUpUiState.track_filename)
                             metronomeOrMedia = !metronomeOrMedia
                         },
+                        filename = warmUpUiState.track_filename
                     )
                 }
             }
@@ -120,6 +122,7 @@ fun WarmupDetailsScreen(
 
 
     ) { innerPadding ->
+        Log.e("BEN4", warmUpUiState.track_filename)
         WarmupDetailsBody(
             warmupUiState = warmUpUiState,
             practiseSessionTaskUiState = practiseSessionTaskUiState,
@@ -131,7 +134,7 @@ fun WarmupDetailsScreen(
                                }
             },
             navigateBack = {
-                mediaPlayer.stop()
+                mediaPlayer.stop(filename = warmUpUiState.track_filename)
                 navigateBack()
             },
             modifier = modifier.padding(innerPadding)
@@ -144,6 +147,7 @@ fun MediaPlayerUiComponent(
     mediaPlayer: MediaPlayerService,
     coroutineScope: CoroutineScope,
     onChange: () -> Unit,
+    filename: String,
 ) {
     Divider()
     Row(
@@ -156,7 +160,8 @@ fun MediaPlayerUiComponent(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .weight(2f)
                 ) {
                     Row(
@@ -165,7 +170,7 @@ fun MediaPlayerUiComponent(
                         Button(
                             modifier = Modifier.padding(3.dp),
                             onClick = {
-                                mediaPlayer.stop()
+                                mediaPlayer.stop(filename = filename)
                             }
                         ) {
                             Text(
@@ -178,11 +183,11 @@ fun MediaPlayerUiComponent(
                             onClick = {
                                 if (mediaPlayer.getIsStopped) {
                                     coroutineScope.launch {
-                                        mediaPlayer.play()
+                                        mediaPlayer.play(filename)
                                     }
                                 } else if (mediaPlayer.getIsPaused) {
                                     coroutineScope.launch {
-                                        mediaPlayer.play()
+                                        mediaPlayer.play(filename)
                                     }
                                 } else {
                                     coroutineScope.launch {
@@ -206,7 +211,8 @@ fun MediaPlayerUiComponent(
                     }
                 }
                 Column(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .weight(1f)
                 ) {
                     Button(
@@ -226,7 +232,8 @@ fun MediaPlayerUiComponent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Card(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(3.dp)
             ) {
                 Box(
@@ -234,7 +241,7 @@ fun MediaPlayerUiComponent(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Text(
-                        text = mediaPlayer.filename,
+                        text = filename,
                         textAlign = TextAlign.Center,
                         fontSize = 18.sp,
                         modifier = Modifier.fillMaxWidth()
@@ -256,7 +263,9 @@ fun MetronomeUiComponent(
         modifier = Modifier.fillMaxSize()
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().weight(4f)
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(4f)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -319,11 +328,13 @@ fun MetronomeUiComponent(
             }
         }
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .weight(1f)
         ) {
             Card(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(5.dp),
             ) {
                 Box(
@@ -367,7 +378,7 @@ private fun WarmupDetailsBody(
         }
         OutlinedButton(
             onClick = {
-                mediaPlayer.stop()
+                mediaPlayer.stop(filename = warmupUiState.track_filename)
                 navigateBack()
             } ,
             modifier = Modifier.fillMaxWidth()
@@ -382,7 +393,8 @@ private fun WarmupDetailsForm(
     warmupUiState: WarmupUiState
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(16.dp)
     ) {
             OutlinedCard(
@@ -391,7 +403,8 @@ private fun WarmupDetailsForm(
                 modifier = Modifier.fillMaxSize()
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.Start
                 ) {
@@ -403,7 +416,8 @@ private fun WarmupDetailsForm(
                 }
                 Divider()
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.Start
                 ) {
@@ -420,7 +434,8 @@ private fun WarmupDetailsForm(
             modifier = Modifier.fillMaxSize()
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
@@ -431,7 +446,8 @@ private fun WarmupDetailsForm(
             }
             Divider()
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
@@ -486,7 +502,7 @@ fun WarmupDetailsScreenPreview() {
             ),
             onCompleteWarmup = {},
             navigateBack = {},
-            mediaPlayer = MediaPlayerService(" ", LocalContext.current),
+            mediaPlayer = MediaPlayerService(LocalContext.current),
         )
     }
 }

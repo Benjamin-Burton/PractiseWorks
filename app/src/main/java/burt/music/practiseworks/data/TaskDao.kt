@@ -32,11 +32,11 @@ interface TaskDao {
     @Query("SELECT COUNT(*) FROM task WHERE type = :type")
     fun getNumTasksByType(type: String): Int
     @Query(
-        "SELECT id, title, student_id, task.type, instructions, current, cues FROM task, practise_session_task WHERE id = task_id AND task.type = :type AND practise_session_id = :sessionId"
+        "SELECT id, title, student_id, task.type, instructions, current, cues, track_filename FROM task, practise_session_task WHERE id = task_id AND task.type = :type AND practise_session_id = :sessionId"
     )
     fun getTasksByTypeAndSessionId(sessionId: Int, type: String): Flow<List<Task>>
     @Query(
-        "SELECT id, title, student_id, task.type, instructions, current, cues, completed FROM task, practise_session_task WHERE id = task_id AND task.type = :type AND practise_session_id = :sessionId"
+        "SELECT id, title, student_id, task.type, instructions, current, cues, completed, track_filename FROM task, practise_session_task WHERE id = task_id AND task.type = :type AND practise_session_id = :sessionId"
     )
     fun getTasksPlusCompletedByTypeAndSessionId(sessionId: Int, type: String): Flow<List<TaskPlusCompleted>>
 }

@@ -37,6 +37,7 @@ data class Task(
     val instructions: String,
     val current: Boolean,
     val cues: String,
+    val track_filename: String,
 )
 
 data class TaskNumInfo(
@@ -52,5 +53,6 @@ data class TaskPlusCompleted(
     val instructions: String,
     val current: Boolean,
     val cues: String,
-    val completed: Boolean
+    val completed: Boolean,
+    val track_filename: String
 )

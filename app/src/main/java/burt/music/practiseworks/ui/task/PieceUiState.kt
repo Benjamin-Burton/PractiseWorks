@@ -15,15 +15,13 @@
  */
 
 package burt.music.practiseworks.ui.task
-import burt.music.practiseworks.data.StudentDao
-import burt.music.practiseworks.data.StudentsRepository
 import burt.music.practiseworks.data.Task
 import burt.music.practiseworks.ui.item.ItemUiState
 
 /**
  * Represents Ui State for a Task.
  */
-data class TaskUiState(
+data class PieceUiState(
     val id: Int = 0,
     val title: String = "",
     val student_id: Int = 1,
@@ -40,7 +38,7 @@ data class TaskUiState(
  * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
  * [ItemUiState] is not a valid [Int], then the quantity will be set to 0
  */
-fun TaskUiState.toTask(): Task = Task(
+fun PieceUiState.toTask(): Task = Task(
     id = id,
     title = title,
     student_id = student_id,
@@ -54,18 +52,17 @@ fun TaskUiState.toTask(): Task = Task(
 /**
  * Extension function to convert [Task] to [TaskUiState]
  */
-fun Task.toTaskUiState(actionEnabled: Boolean = false): TaskUiState = TaskUiState(
+fun Task.toPieceUiState(): PieceUiState = PieceUiState(
     id = id,
     title = title,
     student_id = student_id,
-    type = TaskTypes.valueOf(type),
+    type = TaskTypes.valueOf(type.uppercase()),
     instructions = instructions,
     current = current,
     cues = cues,
-    actionEnabled = actionEnabled,
     track_filename = track_filename
 )
 
-fun TaskUiState.isValid() : Boolean {
+fun PieceUiState.isValid() : Boolean {
     return title.isNotBlank() && instructions.isNotBlank() && cues.isNotBlank() && type.string != ""
  }

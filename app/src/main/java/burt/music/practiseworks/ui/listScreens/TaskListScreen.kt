@@ -22,8 +22,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import burt.music.practiseworks.ui.navigation.NavigationDestination
@@ -32,6 +34,7 @@ import burt.music.practiseworks.data.Task
 import burt.music.practiseworks.data.TaskPlusCompleted
 import burt.music.practiseworks.ui.AppViewModelProvider
 import burt.music.practiseworks.ui.home.HomeDestination
+import burt.music.practiseworks.ui.task.PieceDetailsDestination
 import burt.music.practiseworks.ui.task.TaskTypes
 import burt.music.practiseworks.ui.task.WarmupDetailsDestination
 import burt.music.practiseworks.ui.theme.PractiseWorksTheme
@@ -87,6 +90,7 @@ fun TaskListScreen(
                             // navController.navigate("${ExerciseDetailsDestination.route}/${viewModel.getPractiseSessionId()}/$it")
                         } else if (viewModel.getType() == "piece") {
                             // navigate to piece screen
+                            navController.navigate("${PieceDetailsDestination.route}/${viewModel.getPractiseSessionId()}/$it")
                         }
                     },
                     modifier = modifier.padding(innerPadding)
@@ -135,7 +139,6 @@ private fun PractiseWorksTaskList(
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(items = taskList, key = { it.id }) { task ->
             PractiseWorksTask(task = task, onItemClick = onItemClick)
-            Divider()
         }
     }
 }
@@ -162,32 +165,78 @@ private fun PractiseWorksTask(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.padding(8.dp),
-        elevation = 4.dp
+        modifier = modifier.padding(8.dp)
+            .height(80.dp),
+        elevation = 4.dp,
     ) {
         Row(modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .clickable { onItemClick(task) }
-            .padding(vertical = 16.dp)
         ) {
             if (task.completed) {
-                taskIcon(
-                    R.drawable.task_icon_complete,
-                    task.completed)
-                Text(
-                    text = task.title,
-                    modifier = Modifier.weight(1.5f),
-                    fontWeight = FontWeight.Bold
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        taskIcon(
+                            R.drawable.task_icon_complete,
+                            task.completed
+                        )
+                    }
+                }
+                Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(4f)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text(
+                            text = task.title,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                    }
+                }
             } else {
-                taskIcon(
-                    R.drawable.task_icon,
-                    task.completed)
-                Text(
-                    text = task.title,
-                    modifier = Modifier.weight(1.5f),
-                    fontWeight = FontWeight.Bold
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        taskIcon(
+                            R.drawable.task_icon,
+                            task.completed
+                        )
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(4f)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text(
+                            text = task.title,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                    }
+                }
             }
         }
     }
@@ -230,9 +279,9 @@ fun TaskListScreenRoutePreview() {
     PractiseWorksTheme {
         TaskListBody(
             listOf(
-                TaskPlusCompleted(1, "", 100, TaskTypes.WARMUP.string, "Play it right", true, "Again: lower your wrist.", true),
-                TaskPlusCompleted(2, "Pen", 100, TaskTypes.WARMUP.string, "And close it", true, "And open it", false),
-                TaskPlusCompleted(3, "TV", 100, TaskTypes.WARMUP.string, "C major scale.", true, "1,2,3,1,2,3,4,5", true)
+                TaskPlusCompleted(1, "", 100, TaskTypes.WARMUP.string, "Play it right", true, "Again: lower your wrist.", true, "exercise_1_ng.mp3"),
+                TaskPlusCompleted(2, "Pen", 100, TaskTypes.WARMUP.string, "And close it", true, "And open it", false, "exercise_2_5_note_scale.mp3"),
+                TaskPlusCompleted(3, "TV", 100, TaskTypes.WARMUP.string, "C major scale.", true, "1,2,3,1,2,3,4,5", true, "exercise_4_scale_in_3rds.mp3")
             ),
             onItemClick = {}
         )
