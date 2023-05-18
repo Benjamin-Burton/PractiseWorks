@@ -185,6 +185,24 @@ private fun PieceDetailsForm(
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
+                        text = pieceUiState.title,
+                        style = MaterialTheme.typography.h6,
+                    )
+                }
+            }
+            Spacer(Modifier.size(20.dp))
+            OutlinedCard(
+                elevation = CardDefaults.cardElevation(),
+                colors = CardDefaults.cardColors(),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
                         text = "Instructions",
                         style = MaterialTheme.typography.h6,
                     )
