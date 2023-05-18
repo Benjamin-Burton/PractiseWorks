@@ -169,6 +169,15 @@ fun StudentInputForm(
             enabled = enabled,
             singleLine = true
         )
+        OutlinedTextField(
+            value = studentUiState.practiseGoal.toString(),
+            onValueChange = { onValueChange(studentUiState.copy(practiseGoal = it.toInt())) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text("Practise Amount Weekly Goal") },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
 //        DatePickerField(
 //            date = studentUiState.join_date,
 //            onValueChange = { onValueChange(studentUiState.copy(join_date = it)) }

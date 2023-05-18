@@ -102,15 +102,17 @@ fun PractiseScreen(
                     .fillMaxSize()
                     .padding(10.dp)
             ) {
-                Column(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(10.dp)
+                ) {
 
                     for (practiseType in practiseScreenTypesState.practiseTypes) {
                         TaskTypeButton(
                             taskType = TaskTypes.valueOf(practiseType.type.uppercase()),
                             numberInSession = practiseType.numTotal,
-                            numberComplete = (practiseScreenNumCompletedTasksUiState.practiseList.firstOrNull() {it.type == practiseType.type}?.numCompleted
+                            numberComplete = (practiseScreenNumCompletedTasksUiState.practiseList.firstOrNull() { it.type == practiseType.type }?.numCompleted
                                 ?: 0),
                             onTaskTypeClick = {
                                 navController.navigate("${TaskListDestination.route}/${viewModel.getPractiseSessionId()}/${practiseType.type}")
@@ -122,19 +124,6 @@ fun PractiseScreen(
                 }
             }
         }
-
-//        var allDone = true
-//        for (practiseType in practiseScreenTypesState.practiseTypes) {
-//            if (practiseType.numTotal != practiseType.numCompleted) {
-//                allDone = false
-//                Log.e("BEN","here i sit")
-//            }
-//        }
-//        if (allDone) {
-//            PractiseCompleteConfirmationDialog(
-//                onNavigateBack = onNavigateBack
-//            )
-//        }
 
 //        TaskListBody(
 //            taskList = practiseScreenUiState.taskList,

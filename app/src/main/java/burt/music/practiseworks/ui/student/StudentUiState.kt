@@ -33,7 +33,9 @@ data class StudentUiState(
     val join_date: Date = Date(),
     val lesson_day: String = "",
     val lesson_time: String = "",
-    val actionEnabled: Boolean = false
+    val actionEnabled: Boolean = false,
+    val practiseGoal: Int = 0,
+    val totalPoints: Int = 0
 )
 
 /**
@@ -49,7 +51,9 @@ fun StudentUiState.toStudent(): Student = Student(
     teacher_id = teacher_id,
     join_date = join_date,
     lesson_day = lesson_day,
-    lesson_time = lesson_time
+    lesson_time = lesson_time,
+    practise_goal = practiseGoal,
+    total_points = totalPoints
 )
 
 /**
@@ -66,7 +70,9 @@ fun Student.toStudentUiState(actionEnabled: Boolean = false): StudentUiState = S
     join_date = join_date,
     lesson_day = lesson_day,
     lesson_time = lesson_time,
-    actionEnabled = actionEnabled
+    actionEnabled = actionEnabled,
+    practiseGoal = practise_goal,
+    totalPoints = total_points
 )
 
 fun StudentUiState.isValid() : Boolean {

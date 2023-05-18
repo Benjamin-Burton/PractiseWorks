@@ -191,4 +191,4 @@ class WelcomeViewModel(
 /**
  * Ui State for WelcomeScreen
  */
-data class WelcomeUiState(val student: Student = Student(0, "test", "test", "test", "test", "test", 1, Date(), "test", "12:00"  ))
+data class WelcomeUiState(val student: Student = Student(0, "test", "test", "test", "test", "test", 1, Date(), "test", "12:00", practise_goal = 5, total_points = 4000))

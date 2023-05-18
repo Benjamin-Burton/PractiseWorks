@@ -107,6 +107,7 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(),
                 practiseWorksApplication().container.tasksRepository,
                 practiseWorksApplication().container.practiseSessionsRepository,
+                practiseWorksApplication().container.studentsRepository,
                 practiseWorksApplication().container.practiseSessionTasksRepository)
         }
 
@@ -114,7 +115,8 @@ object AppViewModelProvider {
             WarmupDetailsViewModel(
                 this.createSavedStateHandle(),
                 practiseWorksApplication().container.tasksRepository,
-                practiseWorksApplication().container.practiseSessionTasksRepository
+                practiseWorksApplication().container.practiseSessionTasksRepository,
+                practiseWorksApplication().container.studentsRepository
             )
         }
 
@@ -122,7 +124,8 @@ object AppViewModelProvider {
             PieceDetailsViewModel(
                 this.createSavedStateHandle(),
                 practiseWorksApplication().container.tasksRepository,
-                practiseWorksApplication().container.practiseSessionTasksRepository
+                practiseWorksApplication().container.practiseSessionTasksRepository,
+                practiseWorksApplication().container.studentsRepository
             )
         }
     }

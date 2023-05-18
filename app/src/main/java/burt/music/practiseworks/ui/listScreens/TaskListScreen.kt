@@ -187,6 +187,17 @@ private fun PractiseWorksTask(
                             R.drawable.task_icon_complete,
                             task.completed
                         )
+                        if (task.type == "warmup") {
+                            Text(
+                                text = "\n\n\n+100pts",
+                                fontSize = 12.sp
+                            )
+                        } else {
+                            Text(
+                                text = "\n\n\n+200pts",
+                                fontSize = 12.sp
+                            )
+                        }
                     }
                 }
                 Column(

@@ -16,6 +16,8 @@
 
 package burt.music.practiseworks.ui.listScreens
 
+import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,6 +33,7 @@ class PractiseScreenViewModel(
     savedStateHandle: SavedStateHandle,
     private val tasksRepository: TasksRepository,
     private val practiseSessionsRepository: PractiseSessionsRepository,
+    private val studentsRepository: StudentsRepository,
     private val practiseSessionTasksRepository: PractiseSessionTasksRepository) : ViewModel() {
 
     private val practiseSessionId: Int = checkNotNull(savedStateHandle[PractiseScreenDestination.practiseIdArg])
@@ -78,6 +81,18 @@ class PractiseScreenViewModel(
                 end_date = Date()
             )
         )
+        var allDone = true
+        for (practiseType in practiseSessionTasksRepository.getNumTasksCompletedInfo(practiseSessionId).first()) {
+            if (practiseType.numTotal != practiseType.numCompleted) {
+                allDone = false
+                Log.e("BEN","here i sit")
+            }
+        }
+        if (allDone) {
+            var student: Student = studentsRepository.getStudentStream(1).first()
+            student.total_points += 500
+            studentsRepository.updateStudent(student)
+        }
     }
 
     companion object {

@@ -1,11 +1,13 @@
 package burt.music.practiseworks.ui.task
 
+import androidx.compose.foundation.Image
 import android.content.Context
 import android.media.DrmInitData.SchemeInitData
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,8 +19,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -173,10 +178,17 @@ fun MediaPlayerUiComponent(
                                 mediaPlayer.stop(filename = filename)
                             }
                         ) {
-                            Text(
-                                text = "Stop",
-                                fontSize = 12.sp
+                            Image(
+                                modifier = Modifier
+                                    .size(35.dp),
+                                contentScale = ContentScale.Fit,
+                                painter = painterResource(R.drawable.stop_w),
+                                contentDescription = null
                             )
+//                            Text(
+//                                text = "Stop",
+//                                fontSize = 12.sp
+//                            )
                         }
                         Button(
                             modifier = Modifier.padding(3.dp),
@@ -197,15 +209,38 @@ fun MediaPlayerUiComponent(
                             }
                         ) {
                             if (mediaPlayer.getIsStopped) {
-                                Text(
-                                    text = "Play ",
-                                    fontSize = 12.sp
+                                Image(
+                                    modifier = Modifier
+                                        .size(35.dp)
+                                        .clip(RoundedCornerShape(1)),
+                                    contentScale = ContentScale.Fit,
+                                    painter = painterResource(id = R.drawable.play_w),
+                                    contentDescription = null
                                 )
+//                                Text(
+//                                    text = "Play ",
+//                                    fontSize = 12.sp
+//                                )
                             } else {
-                                Text(
-                                    text = if (mediaPlayer.getIsPaused) "Play " else "Pause",
-                                    fontSize = 12.sp
-                                )
+                                if (mediaPlayer.getIsPaused) {
+                                    Image(
+                                        modifier = Modifier
+                                            .size(35.dp)
+                                            .clip(RoundedCornerShape(1)),
+                                        contentScale = ContentScale.Fit,
+                                        painter = painterResource(id = R.drawable.play_w),
+                                        contentDescription = null
+                                    )
+                                } else {
+                                    Image(
+                                        modifier = Modifier
+                                            .size(35.dp)
+                                            .clip(RoundedCornerShape(1)),
+                                        contentScale = ContentScale.Fit,
+                                        painter = painterResource(id = R.drawable.pause_w),
+                                        contentDescription = null
+                                    )
+                                }
                             }
                         }
                     }

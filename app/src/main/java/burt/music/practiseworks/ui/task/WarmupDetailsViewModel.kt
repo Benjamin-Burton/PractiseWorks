@@ -24,9 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import burt.music.practiseworks.data.PractiseSessionTask
-import burt.music.practiseworks.data.PractiseSessionTasksRepository
-import burt.music.practiseworks.data.TasksRepository
+import burt.music.practiseworks.data.*
 import burt.music.practiseworks.mediaService.MetronomeService
 import burt.music.practiseworks.ui.item.ItemDetailsDestination
 import kotlinx.coroutines.flow.*
@@ -37,7 +35,8 @@ import kotlinx.coroutines.flow.*
 class WarmupDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val tasksRepository: TasksRepository,
-    private val practiseSessionTasksRepository: PractiseSessionTasksRepository
+    private val practiseSessionTasksRepository: PractiseSessionTasksRepository,
+    private val studentsRepository: StudentsRepository
 ) : ViewModel() {
 
     private val taskId: Int = checkNotNull(savedStateHandle[WarmupDetailsDestination.taskIdArg])
@@ -80,5 +79,8 @@ class WarmupDetailsViewModel(
                 completed = true
             )
         )
+        var student: Student = studentsRepository.getStudentStream(1).first()
+        student.total_points += 100
+        studentsRepository.updateStudent(student)
     }
 }

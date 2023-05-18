@@ -36,4 +36,6 @@ data class Student(
     val join_date: Date,
     val lesson_day: String,
     val lesson_time: String,
+    val practise_goal: Int,
+    var total_points: Int,
 )

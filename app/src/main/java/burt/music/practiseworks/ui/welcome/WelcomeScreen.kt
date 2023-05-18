@@ -148,7 +148,8 @@ private fun WelcomeProfile(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
-            .border(BorderStroke(2.dp, Color.Cyan))
+            .border(BorderStroke(2.dp, Color.Black))
+            .background(Color.hsl(206f, 0f, 0.86f, 1f))
     ) {
         Box(
             modifier = modifier
@@ -205,6 +206,7 @@ private fun statisticsDisplay(
         elevation = CardDefaults.cardElevation(),
         colors = CardDefaults.cardColors(),
         modifier = Modifier.fillMaxSize()
+            .padding(5.dp)
     ) {
         Column(
             modifier = Modifier
@@ -213,35 +215,63 @@ private fun statisticsDisplay(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val padding = 10.dp
+            Text(
+                text = "Name",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Divider()
             Row() {
                 Text(
-                    text = "Name: ",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = student.f_name + " " + student.l_name
+                    text = student.f_name + " " + student.l_name,
+                    fontSize = 14.sp
                 )
             }
             Spacer(Modifier.size(padding))
+            Text(
+                text = "Username: ",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Divider()
             Row() {
                 Text(
-                    text = "username: ",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = student.username
+                    text = student.username,
+                    fontSize = 14.sp
                 )
             }
             Spacer(Modifier.size(padding))
             Text(
                 text = "Lesson Details:",
-                fontSize = 14.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
+            Divider()
             Text(
-                text = student.lesson_day + " " + student.lesson_time
+                text = student.lesson_day + " " + student.lesson_time,
+                fontSize = 14.sp
+            )
+            Spacer(Modifier.size(padding))
+            Text(
+                text = "Practise Goal:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Divider()
+            Text(
+                text = student.practise_goal.toString() + " times per week",
+                fontSize = 14.sp
+            )
+            Spacer(Modifier.size(padding))
+            Text(
+                text = "Total Points:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Divider()
+            Text(
+                text = student.total_points.toString(),
+                fontSize = 14.sp
             )
             Spacer(Modifier.size(padding))
         }
@@ -403,7 +433,7 @@ private val headerList = listOf(
 fun WelcomeProfileRoutePreview() {
     PractiseWorksTheme {
         WelcomeProfile(
-            student = Student(0, "test", "test", "test", "test", "test", 1, Date(), "test", "12:00"  ),
+            student = Student(0, "test", "test", "test", "test", "test", 1, Date(), "test", "12:00", practise_goal = 4, total_points = 4000),
             onPictureClick = { },
             onStatsClick = { },
             onNewPractiseClick = { }
