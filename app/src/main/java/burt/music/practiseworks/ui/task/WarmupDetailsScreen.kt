@@ -100,7 +100,7 @@ fun WarmupDetailsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)
+                    .height(100.dp)
             ) {
                 if (metronomeOrMedia) {
                     MetronomeUiComponent(
@@ -311,8 +311,12 @@ fun MetronomeUiComponent(
                         metronome.reset()
                     }
                 ) {
-                    Text(
-                        text = "Stop"
+                    Image(
+                        modifier = Modifier
+                            .size(25.dp),
+                        contentScale = ContentScale.Fit,
+                        painter = painterResource(R.drawable.stop_w),
+                        contentDescription = null
                     )
                 }
                 Button(
@@ -323,11 +327,18 @@ fun MetronomeUiComponent(
                         }
                     },
                 ) {
-                    Text(
-                        text = "Start"
+                    Image(
+                        modifier = Modifier
+                            .size(25.dp),
+                        contentScale = ContentScale.Fit,
+                        painter = painterResource(R.drawable.play_w),
+                        contentDescription = null
                     )
                 }
-
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Button(
                     modifier = Modifier.padding(2.dp),
                     onClick = {
@@ -337,7 +348,7 @@ fun MetronomeUiComponent(
                     }
                 ) {
                     Text(
-                        text = " + "
+                        text = "+"
                     )
                 }
                 Button(
@@ -349,7 +360,7 @@ fun MetronomeUiComponent(
                     }
                 ) {
                     Text(
-                        text = " - "
+                        text = "-"
                     )
                 }
                 Button(
@@ -357,7 +368,7 @@ fun MetronomeUiComponent(
                     onClick = onChange
                 ) {
                     Text(
-                        text = " > "
+                        text = ">"
                     )
                 }
             }
@@ -399,9 +410,9 @@ private fun WarmupDetailsBody(
 ) {
     Column(
         modifier = modifier
-            .padding(16.dp)
+            .padding(8.dp)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         WarmupDetailsForm(warmupUiState = warmupUiState)
         Button(
@@ -430,7 +441,7 @@ private fun WarmupDetailsForm(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(5.dp)
     ) {
         OutlinedCard(
             elevation = CardDefaults.cardElevation(),
@@ -440,7 +451,7 @@ private fun WarmupDetailsForm(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(5.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Text(
@@ -449,7 +460,7 @@ private fun WarmupDetailsForm(
                 )
             }
         }
-        Spacer(Modifier.size(20.dp))
+        Spacer(Modifier.size(5.dp))
             OutlinedCard(
                 elevation = CardDefaults.cardElevation(),
                 colors = CardDefaults.cardColors(),
@@ -458,7 +469,7 @@ private fun WarmupDetailsForm(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(5.dp),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
@@ -471,7 +482,7 @@ private fun WarmupDetailsForm(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(5.dp),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
@@ -480,7 +491,7 @@ private fun WarmupDetailsForm(
                     )
                 }
             }
-        Spacer(modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.padding(5.dp))
         OutlinedCard(
             elevation = CardDefaults.cardElevation(),
             colors = CardDefaults.cardColors(),
@@ -501,7 +512,7 @@ private fun WarmupDetailsForm(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(5.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Text(

@@ -16,6 +16,7 @@
 
 package burt.music.practiseworks.data
 
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -32,6 +33,9 @@ interface PractiseSessionTasksRepository {
     /**
      * Retrieve an PractiseSession from the given data source that matches with the [id].
      */
+
+    fun getNumTasksToDoInSession(practiseSessionId: Int): Flow<Int>
+    fun getNumTasksDoneInSession(practiseSessionId: Int): Flow<Int>
     fun getPractiseSessionTasksByTypeAndSessionIdStream(type: String, id: Int): Flow<List<PractiseSessionTask>>
 
     fun getNumTasksCompletedInfo(practiseSessionId: Int): Flow<List<PractiseSessionCountInfo>>

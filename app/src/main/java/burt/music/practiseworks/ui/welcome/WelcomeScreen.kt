@@ -157,7 +157,7 @@ private fun WelcomeProfile(
                 .weight(1f)
         ) {
             profilePictureDisplay(
-                profilePic = R.drawable.ben_profile,
+                profilePic = R.drawable.placeholder_profile,
                 onPictureClick = { }
             )
         }
@@ -185,7 +185,7 @@ private fun profilePictureDisplay(
         modifier = modifier
             .fillMaxSize()
             .padding(8.dp)
-            .clip(RoundedCornerShape(50)),
+            .clip(RoundedCornerShape(15)),
         contentScale = ContentScale.Fit,
         painter = painterResource(profilePic),
         /*
@@ -202,6 +202,8 @@ private fun statisticsDisplay(
     modifier: Modifier = Modifier,
     onNewPractiseClick: () -> Unit
 ) {
+    val bigtext = 16.sp
+    val smalltext = 12.sp
     OutlinedCard(
         elevation = CardDefaults.cardElevation(),
         colors = CardDefaults.cardColors(),
@@ -214,64 +216,64 @@ private fun statisticsDisplay(
                 .padding(2.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val padding = 10.dp
+            val padding = 8.dp
             Text(
                 text = "Name",
-                fontSize = 20.sp,
+                fontSize = bigtext,
                 fontWeight = FontWeight.Bold
             )
             Divider()
             Row() {
                 Text(
                     text = student.f_name + " " + student.l_name,
-                    fontSize = 14.sp
+                    fontSize = smalltext
                 )
             }
             Spacer(Modifier.size(padding))
             Text(
                 text = "Username: ",
-                fontSize = 20.sp,
+                fontSize = bigtext,
                 fontWeight = FontWeight.Bold
             )
             Divider()
             Row() {
                 Text(
                     text = student.username,
-                    fontSize = 14.sp
+                    fontSize = smalltext
                 )
             }
             Spacer(Modifier.size(padding))
             Text(
                 text = "Lesson Details:",
-                fontSize = 20.sp,
+                fontSize = bigtext,
                 fontWeight = FontWeight.Bold
             )
             Divider()
             Text(
                 text = student.lesson_day + " " + student.lesson_time,
-                fontSize = 14.sp
+                fontSize = smalltext
             )
             Spacer(Modifier.size(padding))
             Text(
                 text = "Practise Goal:",
-                fontSize = 20.sp,
+                fontSize = bigtext,
                 fontWeight = FontWeight.Bold
             )
             Divider()
             Text(
                 text = student.practise_goal.toString() + " times per week",
-                fontSize = 14.sp
+                fontSize = smalltext
             )
             Spacer(Modifier.size(padding))
             Text(
                 text = "Total Points:",
-                fontSize = 20.sp,
+                fontSize = bigtext,
                 fontWeight = FontWeight.Bold
             )
             Divider()
             Text(
                 text = student.total_points.toString(),
-                fontSize = 14.sp
+                fontSize = smalltext
             )
             Spacer(Modifier.size(padding))
         }
@@ -286,7 +288,7 @@ private fun WelcomeButtons(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(12.dp),
         verticalArrangement = Arrangement.Center
     ) {
@@ -297,7 +299,7 @@ private fun WelcomeButtons(
             val padding = 24.dp
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(padding),
                 horizontalAlignment = Alignment.CenterHorizontally
 
@@ -315,29 +317,29 @@ private fun WelcomeButtons(
                     )
                 }
                 Spacer(Modifier.size(padding))
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { },
-                    colors = ButtonDefaults.buttonColors(),
-                ) {
-                    Text(
-                        text = "Explore",
-                        color = Color.White,
-                        fontSize = 20.sp
-                    )
-                }
-                Spacer(Modifier.size(padding))
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onGenerateTasks,
-                    colors = ButtonDefaults.buttonColors(),
-                ) {
-                    Text(
-                        text = "Generate Tasks in Database",
-                        color = Color.White,
-                        fontSize = 20.sp
-                    )
-                }
+//                Button(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    onClick = { },
+//                    colors = ButtonDefaults.buttonColors(),
+//                ) {
+//                    Text(
+//                        text = "Explore",
+//                        color = Color.White,
+//                        fontSize = 20.sp
+//                    )
+//                }
+//                Spacer(Modifier.size(padding))
+//                Button(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    onClick = onGenerateTasks,
+//                    colors = ButtonDefaults.buttonColors(),
+//                ) {
+//                    Text(
+//                        text = "Generate Tasks in Database",
+//                        color = Color.White,
+//                        fontSize = 20.sp
+//                    )
+//                }
             }
 
         }

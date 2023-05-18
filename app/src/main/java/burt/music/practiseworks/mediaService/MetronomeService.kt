@@ -17,7 +17,7 @@ class MetronomeService(
     val mContext: Context,
     var playing: Boolean = false
 ) {
-    val mMediaPlayer = MediaPlayer.create(mContext, R.raw.click)
+    val mMediaPlayer = MediaPlayer.create(mContext, R.raw.cluck)
     var currentBpm by mutableStateOf(bpm)
         private set
     init {
@@ -26,9 +26,10 @@ class MetronomeService(
     }
 
     suspend fun play() {
+        if (playing) { return }
         playing = true
         while (playing) {
-            delay((60000L / bpm))
+            delay((60000L / currentBpm))
             mMediaPlayer.stop()
             mMediaPlayer.prepare()
             println("tick")

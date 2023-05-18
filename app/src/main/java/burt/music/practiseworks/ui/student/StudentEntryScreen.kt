@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import burt.music.practiseworks.data.Student
 import burt.music.practiseworks.ui.AppViewModelProvider
 import burt.music.practiseworks.ui.PractiseWorksTopAppBar
 import burt.music.practiseworks.ui.item.ItemEntryBody
@@ -57,6 +58,23 @@ fun StudentEntryScreen(
     viewModel: StudentEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+
+    viewModel.updateUiState(
+        Student(
+            id = 1,
+            f_name = "Rachael",
+            l_name = "Coote",
+            total_points = 0,
+            lesson_time = "3.15",
+            lesson_day = "Friday",
+            email = "notarealemail@email.com",
+            password = "notarealpassword",
+            teacher_id = 1,
+            join_date = Date(),
+            practise_goal = 4,
+            username = "rach_maninoff"
+        ).toStudentUiState()
+    )
     Scaffold(
         topBar = {
             PractiseWorksTopAppBar(
@@ -116,6 +134,7 @@ fun StudentInputForm(
     var isExpanded by remember {
         mutableStateOf(false)
     }
+
 
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 

@@ -16,6 +16,7 @@
 
 package burt.music.practiseworks.data
 
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 class OfflinePractiseSessionTasksRepository(private val practiseSessionTaskDao: PractiseSessionTaskDao) : PractiseSessionTasksRepository {
@@ -25,6 +26,8 @@ class OfflinePractiseSessionTasksRepository(private val practiseSessionTaskDao: 
 
     override fun getPractiseSessionTasksBySessionIdStream(practiseSessionId: Int): Flow<List<PractiseSessionTask>> = practiseSessionTaskDao.getPractiseSessionTasksBySessionId(practiseSessionId)
 
+    override fun getNumTasksToDoInSession(practiseSessionId: Int): Flow<Int> = practiseSessionTaskDao.getNumTasksToDoInSession(practiseSessionId)
+    override fun getNumTasksDoneInSession(practiseSessionId: Int): Flow<Int> = practiseSessionTaskDao.getNumTasksDoneInSession(practiseSessionId = practiseSessionId)
     override fun getNumTasksCompletedInfo(practiseSessionId: Int): Flow<List<PractiseSessionCountInfo>> = practiseSessionTaskDao.getNumTasksCompletedInfo(practiseSessionId)
 
     override fun getNumCompletedTasksBySessionIdAndType(practiseSessionId: Int): Flow<List<PractiseSessionTypeNumCompleted>> = practiseSessionTaskDao.getNumCompletedTasksBySessionIdAndType(practiseSessionId)

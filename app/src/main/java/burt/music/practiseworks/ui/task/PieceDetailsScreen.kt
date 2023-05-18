@@ -71,7 +71,7 @@ fun PieceDetailsScreen(
     Scaffold(
         topBar = {
             PractiseWorksTopAppBar(
-                title = stringResource(WarmupDetailsDestination.titleRes),
+                title = "Piece Details",
                 canNavigateBack = true,
                 navigateUp = {
                     mediaPlayer.stop(filename = pieceUiState.track_filename)
@@ -83,7 +83,7 @@ fun PieceDetailsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)
+                    .height(100.dp)
             ) {
                 if (metronomeOrMedia) {
                     MetronomeUiComponent(

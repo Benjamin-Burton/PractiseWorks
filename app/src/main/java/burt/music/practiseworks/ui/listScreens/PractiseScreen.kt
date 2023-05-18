@@ -2,6 +2,7 @@
 package burt.music.practiseworks.ui.listScreens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -62,12 +63,23 @@ fun PractiseScreen(
     val practiseScreenTypesState by viewModel.practiseTypesUiState.collectAsState()
     val practiseScreenNumCompletedTasksUiState by viewModel.numCompletedTasksUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    BackHandler {
+        coroutineScope.launch {
+            viewModel.endSession()
+            onNavigateBack()
+        }
+    }
     Scaffold(
         topBar = {
             PractiseWorksTopAppBar(
                 title = stringResource(HomeDestination.titleRes),
                 canNavigateBack = true,
-                navigateUp = onNavigateBack
+                navigateUp = {
+                    coroutineScope.launch {
+                        viewModel.endSession()
+                        onNavigateBack()
+                    }
+                }
             )
         },
         bottomBar = {

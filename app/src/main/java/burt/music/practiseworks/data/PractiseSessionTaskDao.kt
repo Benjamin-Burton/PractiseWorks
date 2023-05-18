@@ -22,6 +22,12 @@ interface PractiseSessionTaskDao {
     fun getNumTasksCompletedInfo(practiseSessionId: Int): Flow<List<PractiseSessionCountInfo>>
     // TODO work out how to include the bool in this query - so that we have
     // TODO type, count of type, num completed of type
+
+    @Query ("SELECT COUNT(*) as count from practise_session_task WHERE practise_session_id = :practiseSessionId")
+    fun getNumTasksToDoInSession(practiseSessionId: Int): Flow<Int>
+    @Query ("SELECT COUNT(*) as count from practise_session_task WHERE practise_session_id = :practiseSessionId AND completed = 1")
+    fun getNumTasksDoneInSession(practiseSessionId: Int): Flow<Int>
+
     // Solution - have two separate quereies
     @Query("SELECT type, COUNT(*) as numCompleted FROM practise_session_task WHERE practise_session_id = :practiseSessionId AND completed = 1 GROUP BY type")
     fun getNumCompletedTasksBySessionIdAndType(practiseSessionId: Int): Flow<List<PractiseSessionTypeNumCompleted>>

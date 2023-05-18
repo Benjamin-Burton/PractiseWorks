@@ -18,10 +18,12 @@ package burt.music.practiseworks.ui.listScreens
 
 import android.util.Log
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import burt.music.practiseworks.data.*
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
@@ -81,14 +83,10 @@ class PractiseScreenViewModel(
                 end_date = Date()
             )
         )
-        var allDone = true
-        for (practiseType in practiseSessionTasksRepository.getNumTasksCompletedInfo(practiseSessionId).first()) {
-            if (practiseType.numTotal != practiseType.numCompleted) {
-                allDone = false
-                Log.e("BEN","here i sit")
-            }
-        }
-        if (allDone) {
+
+        val todo = practiseSessionTasksRepository.getNumTasksToDoInSession(practiseSessionId = practiseSessionId).first()
+        val done = practiseSessionTasksRepository.getNumTasksDoneInSession(practiseSessionId = practiseSessionId).first()
+        if (todo == done) {
             var student: Student = studentsRepository.getStudentStream(1).first()
             student.total_points += 500
             studentsRepository.updateStudent(student)
