@@ -7,22 +7,17 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,7 +43,7 @@ import kotlinx.coroutines.launch
 
 object WarmupDetailsDestination : NavigationDestination {
     override val route = "warmup_details"
-    override val titleRes = R.string.item_detail_title
+    override val titleRes = R.string.warmup_detail_title
     const val taskIdArg = "taskId"
     const val sessionArg = "sessionArg"
     val routeWithArgs = "$route/{$sessionArg}/{$taskIdArg}"
@@ -99,6 +94,7 @@ fun WarmupDetailsScreen(
         bottomBar = {
             Column(
                 modifier = Modifier.fillMaxWidth()
+                    .height(60.dp)
             ) {
                 if (metronomeOrMedia) {
                     MetronomeUiComponent(
@@ -149,6 +145,7 @@ fun MediaPlayerUiComponent(
     coroutineScope: CoroutineScope,
     onChange: () -> Unit,
 ) {
+    Divider()
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -158,67 +155,91 @@ fun MediaPlayerUiComponent(
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
-                    modifier = Modifier.padding(3.dp),
-                    onClick = {
-                        mediaPlayer.stop()
-                    }
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .weight(2f)
                 ) {
-                    Text(
-                        text = "Stop"
-                    )
-                }
-                Button(
-                    modifier = Modifier.padding(3.dp),
-                    onClick = {
-                        if (mediaPlayer.getIsStopped) {
-                            coroutineScope.launch {
-                                mediaPlayer.play()
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            modifier = Modifier.padding(3.dp),
+                            onClick = {
+                                mediaPlayer.stop()
                             }
-                        } else if (mediaPlayer.getIsPaused) {
-                            coroutineScope.launch {
-                                mediaPlayer.play()
+                        ) {
+                            Text(
+                                text = "Stop",
+                                fontSize = 12.sp
+                            )
+                        }
+                        Button(
+                            modifier = Modifier.padding(3.dp),
+                            onClick = {
+                                if (mediaPlayer.getIsStopped) {
+                                    coroutineScope.launch {
+                                        mediaPlayer.play()
+                                    }
+                                } else if (mediaPlayer.getIsPaused) {
+                                    coroutineScope.launch {
+                                        mediaPlayer.play()
+                                    }
+                                } else {
+                                    coroutineScope.launch {
+                                        mediaPlayer.pause()
+                                    }
+                                }
                             }
-                        } else {
-                            coroutineScope.launch {
-                                mediaPlayer.pause()
+                        ) {
+                            if (mediaPlayer.getIsStopped) {
+                                Text(
+                                    text = "Play ",
+                                    fontSize = 12.sp
+                                )
+                            } else {
+                                Text(
+                                    text = if (mediaPlayer.getIsPaused) "Play " else "Pause",
+                                    fontSize = 12.sp
+                                )
                             }
                         }
                     }
+                }
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .weight(1f)
                 ) {
-                    if (mediaPlayer.getIsStopped) {
+                    Button(
+                        modifier = Modifier.padding(3.dp),
+                        onClick = onChange
+                    ) {
                         Text(
-                            text = "Play "
-                        )
-                    } else {
-                        Text(
-                            text = if (mediaPlayer.getIsPaused) "Play " else "Pause"
+                            text = ">"
                         )
                     }
-                }
-                Button(
-                    modifier = Modifier.padding(3.dp),
-                    onClick = onChange
-                ) {
-                    Text(
-                        text = ">"
-                    )
                 }
             }
         }
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Card(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(5.dp)
+                modifier = Modifier.fillMaxSize()
+                    .padding(3.dp)
             ) {
-                Text(
-                    text = mediaPlayer.filename,
-                    textAlign = TextAlign.Center,
-                    fontSize = 18.sp,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        text = mediaPlayer.filename,
+                        textAlign = TextAlign.Center,
+                        fontSize = 18.sp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -230,76 +251,92 @@ fun MetronomeUiComponent(
     coroutineScope: CoroutineScope,
     onChange: () -> Unit,
 ) {
+    Divider()
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize()
     ) {
-        Button(
-            modifier = Modifier.padding(3.dp),
-            onClick = {
-                metronome.reset()
-            }
+        Column(
+            modifier = Modifier.fillMaxSize().weight(4f)
         ) {
-            Text(
-                text = "Stop"
-            )
-        }
-        Button(
-            modifier = Modifier.padding(3.dp),
-            onClick = {
-                coroutineScope.launch {
-                    metronome.play()
-                }
-            },
-        ) {
-            Text(
-                text = "Start"
-            )
-        }
-
-        Button(
-            modifier = Modifier.padding(3.dp),
-            onClick = {
-                coroutineScope.launch {
-                    metronome.increaseBpm(4)
-                }
-            }
-        ) {
-            Text(
-                text = "   +   "
-            )
-        }
-        Button(
-            modifier = Modifier.padding(3.dp),
-            onClick = {
-                coroutineScope.launch {
-                    metronome.decreaseBpm(4)
-                }
-            }
-        ) {
-            Text(
-                text = "   -   "
-            )
-        }
-        Button(
-            modifier = Modifier.padding(3.dp),
-            onClick = onChange
-        ) {
-            Text(
-                text = "   >   "
-            )
-        }
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Box(
-                contentAlignment = Alignment.Center
+            Row(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = metronome.getCurrentBpm.toString(),
-                    textAlign = TextAlign.Center,
-                    fontSize = 24.sp,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Button(
+                    modifier = Modifier.padding(2.dp),
+                    onClick = {
+                        metronome.reset()
+                    }
+                ) {
+                    Text(
+                        text = "Stop"
+                    )
+                }
+                Button(
+                    modifier = Modifier.padding(2.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            metronome.play()
+                        }
+                    },
+                ) {
+                    Text(
+                        text = "Start"
+                    )
+                }
+
+                Button(
+                    modifier = Modifier.padding(2.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            metronome.increaseBpm(4)
+                        }
+                    }
+                ) {
+                    Text(
+                        text = " + "
+                    )
+                }
+                Button(
+                    modifier = Modifier.padding(2.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            metronome.decreaseBpm(4)
+                        }
+                    }
+                ) {
+                    Text(
+                        text = " - "
+                    )
+                }
+                Button(
+                    modifier = Modifier.padding(2.dp),
+                    onClick = onChange
+                ) {
+                    Text(
+                        text = " > "
+                    )
+                }
+            }
+        }
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .weight(1f)
+        ) {
+            Card(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(5.dp),
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        text = "BPM: " + metronome.getCurrentBpm.toString(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 16.sp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -320,7 +357,6 @@ private fun WarmupDetailsBody(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
         WarmupDetailsForm(warmupUiState = warmupUiState)
         Button(
             onClick = onCompleteWarmup,
@@ -332,7 +368,7 @@ private fun WarmupDetailsBody(
         OutlinedButton(
             onClick = {
                 mediaPlayer.stop()
-                navigateBack
+                navigateBack()
             } ,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -345,23 +381,67 @@ private fun WarmupDetailsBody(
 private fun WarmupDetailsForm(
     warmupUiState: WarmupUiState
 ) {
-    Log.e("BEN3", warmupUiState.instructions)
     Column(
         modifier = Modifier.fillMaxSize()
+            .padding(16.dp)
     ) {
-            Text(
-                text = "INSTRUCTIONS"
-            )
-            Text(
-                text = warmupUiState.instructions
-            )
+            OutlinedCard(
+                elevation = CardDefaults.cardElevation(),
+                colors = CardDefaults.cardColors(),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        text = "Instructions",
+                        style = MaterialTheme.typography.h6,
 
-            Text(
-                text = "CUES"
-            )
-            Text(
-                text = warmupUiState.cues
-            )
+                    )
+                }
+                Divider()
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        text = warmupUiState.instructions,
+                        style = MaterialTheme.typography.body2
+                    )
+                }
+            }
+        Spacer(modifier = Modifier.padding(16.dp))
+        OutlinedCard(
+            elevation = CardDefaults.cardElevation(),
+            colors = CardDefaults.cardColors(),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = "Cues",
+                    style = MaterialTheme.typography.h6,
+                )
+            }
+            Divider()
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = warmupUiState.cues,
+                    style = MaterialTheme.typography.body2
+                )
+            }
+
+        }
     }
 }
 

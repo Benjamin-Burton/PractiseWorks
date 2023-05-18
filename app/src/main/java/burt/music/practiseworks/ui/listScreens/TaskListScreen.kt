@@ -74,7 +74,8 @@ fun TaskListScreen(
             OutlinedCard(
                 elevation = CardDefaults.cardElevation(),
                 colors = CardDefaults.cardColors(),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(10.dp)
             ) {
                 TaskListBody(
@@ -108,7 +109,11 @@ private fun TaskListBody(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        PractiseWorksListHeader()
+        if (taskList.isEmpty()) {
+            PractiseWorksListHeader(taskType = "No tasks.")
+        } else {
+            PractiseWorksListHeader(taskType = taskList[0].type)
+        }
         Divider()
         if (taskList.isEmpty()) {
             Text(
@@ -136,11 +141,13 @@ private fun PractiseWorksTaskList(
 }
 
 @Composable
-private fun PractiseWorksListHeader(modifier: Modifier = Modifier) {
+private fun PractiseWorksListHeader(
+    modifier: Modifier = Modifier,
+    taskType: String) {
     Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         headerList.forEach {
             Text(
-                text = stringResource(it.headerStringId),
+                text = taskType.replaceFirstChar {it.uppercase() } + " Tasks",
                 modifier = Modifier.weight(it.weight),
                 style = MaterialTheme.typography.h6
             )
@@ -163,14 +170,25 @@ private fun PractiseWorksTask(
             .clickable { onItemClick(task) }
             .padding(vertical = 16.dp)
         ) {
-            taskIcon(
-                R.drawable.task_icon,
-                task.completed)
-            Text(
-                text = task.title,
-                modifier = Modifier.weight(1.5f),
-                fontWeight = FontWeight.Bold
-            )
+            if (task.completed) {
+                taskIcon(
+                    R.drawable.task_icon_complete,
+                    task.completed)
+                Text(
+                    text = task.title,
+                    modifier = Modifier.weight(1.5f),
+                    fontWeight = FontWeight.Bold
+                )
+            } else {
+                taskIcon(
+                    R.drawable.task_icon,
+                    task.completed)
+                Text(
+                    text = task.title,
+                    modifier = Modifier.weight(1.5f),
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
@@ -198,11 +216,6 @@ fun taskIcon(@DrawableRes taskIcon: Int,
          */
         contentDescription = null
     )
-    if (completed) {
-        Text(
-            text = "Complete!"
-        )
-    }
 }
 
 private data class PractiseWorksHeader(@StringRes val headerStringId: Int, val weight: Float)
