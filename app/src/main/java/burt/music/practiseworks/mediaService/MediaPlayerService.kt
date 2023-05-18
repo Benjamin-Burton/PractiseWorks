@@ -1,6 +1,9 @@
 package burt.music.practiseworks.mediaService
 
 import android.content.Context
+import android.content.res.AssetFileDescriptor
+import android.content.res.AssetManager
+import android.content.res.Resources
 import android.media.MediaPlayer
 import android.net.Uri
 import androidx.compose.runtime.getValue
@@ -9,12 +12,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import com.example.practiseworks.R
 import kotlinx.coroutines.delay
+import java.io.File
 
 class MediaPlayerService (
     val filename: String = "",
     val mContext: Context,
 ) {
-    val mMediaPlayer = MediaPlayer.create(mContext, R.raw.exercise_1_ng)
+    val afd: AssetFileDescriptor = mContext.assets.openFd(filename)
+    val mMediaPlayer = MediaPlayer()
     var playing by mutableStateOf(false)
         private set
     var paused by mutableStateOf(false)
@@ -29,6 +34,11 @@ class MediaPlayerService (
 
     val getIsStopped: Boolean
         get() = stopped
+
+    init {
+        mMediaPlayer.setDataSource(afd)
+        mMediaPlayer.prepare()
+    }
     suspend fun play() {
         playing = true
         paused = false

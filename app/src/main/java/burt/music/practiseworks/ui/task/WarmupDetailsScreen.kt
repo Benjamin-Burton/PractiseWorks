@@ -3,6 +3,7 @@ package burt.music.practiseworks.ui.task
 import android.content.Context
 import android.media.DrmInitData.SchemeInitData
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -78,12 +79,21 @@ fun WarmupDetailsScreen(
             filename = "exercise_1_ng.mp3"
         ))
     }
+    BackHandler {
+        mediaPlayer.stop()
+        metronome.reset()
+        navigateBack()
+    }
+
     Scaffold(
         topBar = {
             PractiseWorksTopAppBar(
                 title = stringResource(WarmupDetailsDestination.titleRes),
                 canNavigateBack = true,
-                navigateUp = navigateBack
+                navigateUp = {
+                    mediaPlayer.stop()
+                    navigateBack()
+                }
             )
         },
         bottomBar = {
@@ -95,6 +105,7 @@ fun WarmupDetailsScreen(
                         metronome = metronome,
                         coroutineScope = coroutineScope,
                         onChange = {
+                            metronome.reset()
                             metronomeOrMedia = !metronomeOrMedia
                         }
                     )
@@ -103,6 +114,7 @@ fun WarmupDetailsScreen(
                         mediaPlayer,
                         coroutineScope,
                         onChange = {
+                            mediaPlayer.stop()
                             metronomeOrMedia = !metronomeOrMedia
                         },
                     )
@@ -115,13 +127,17 @@ fun WarmupDetailsScreen(
         WarmupDetailsBody(
             warmupUiState = warmUpUiState,
             practiseSessionTaskUiState = practiseSessionTaskUiState,
+            mediaPlayer = mediaPlayer,
             onCompleteWarmup = {
                                coroutineScope.launch {
                                    viewModel.completeItem()
                                    navigateBack()
                                }
             },
-            navigateBack = navigateBack,
+            navigateBack = {
+                mediaPlayer.stop()
+                navigateBack()
+            },
             modifier = modifier.padding(innerPadding)
         )
     }
@@ -143,6 +159,7 @@ fun MediaPlayerUiComponent(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
+                    modifier = Modifier.padding(3.dp),
                     onClick = {
                         mediaPlayer.stop()
                     }
@@ -152,6 +169,7 @@ fun MediaPlayerUiComponent(
                     )
                 }
                 Button(
+                    modifier = Modifier.padding(3.dp),
                     onClick = {
                         if (mediaPlayer.getIsStopped) {
                             coroutineScope.launch {
@@ -170,19 +188,20 @@ fun MediaPlayerUiComponent(
                 ) {
                     if (mediaPlayer.getIsStopped) {
                         Text(
-                            text = "Play"
+                            text = "Play "
                         )
                     } else {
                         Text(
-                            text = if (mediaPlayer.getIsPaused) "Play" else "Pause"
+                            text = if (mediaPlayer.getIsPaused) "Play " else "Pause"
                         )
                     }
                 }
                 Button(
+                    modifier = Modifier.padding(3.dp),
                     onClick = onChange
                 ) {
                     Text(
-                        text = "   >   "
+                        text = ">"
                     )
                 }
             }
@@ -192,6 +211,7 @@ fun MediaPlayerUiComponent(
         ) {
             Card(
                 modifier = Modifier.fillMaxWidth()
+                    .padding(5.dp)
             ) {
                 Text(
                     text = mediaPlayer.filename,
@@ -214,6 +234,7 @@ fun MetronomeUiComponent(
         modifier = Modifier.fillMaxWidth()
     ) {
         Button(
+            modifier = Modifier.padding(3.dp),
             onClick = {
                 metronome.reset()
             }
@@ -223,6 +244,7 @@ fun MetronomeUiComponent(
             )
         }
         Button(
+            modifier = Modifier.padding(3.dp),
             onClick = {
                 coroutineScope.launch {
                     metronome.play()
@@ -233,7 +255,9 @@ fun MetronomeUiComponent(
                 text = "Start"
             )
         }
+
         Button(
+            modifier = Modifier.padding(3.dp),
             onClick = {
                 coroutineScope.launch {
                     metronome.increaseBpm(4)
@@ -245,6 +269,7 @@ fun MetronomeUiComponent(
             )
         }
         Button(
+            modifier = Modifier.padding(3.dp),
             onClick = {
                 coroutineScope.launch {
                     metronome.decreaseBpm(4)
@@ -256,6 +281,7 @@ fun MetronomeUiComponent(
             )
         }
         Button(
+            modifier = Modifier.padding(3.dp),
             onClick = onChange
         ) {
             Text(
@@ -263,17 +289,20 @@ fun MetronomeUiComponent(
             )
         }
         Card(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = metronome.getCurrentBpm.toString(),
-                textAlign = TextAlign.Center,
-                fontSize = 24.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = metronome.getCurrentBpm.toString(),
+                    textAlign = TextAlign.Center,
+                    fontSize = 24.sp,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     }
-
 }
 
 @Composable
@@ -282,6 +311,7 @@ private fun WarmupDetailsBody(
     practiseSessionTaskUiState: PractiseSessionTaskUiState,
     onCompleteWarmup: () -> Unit,
     navigateBack: () -> Unit,
+    mediaPlayer: MediaPlayerService,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -300,7 +330,10 @@ private fun WarmupDetailsBody(
             Text("Completed")
         }
         OutlinedButton(
-            onClick = navigateBack ,
+            onClick = {
+                mediaPlayer.stop()
+                navigateBack
+            } ,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Go Back")
@@ -372,7 +405,8 @@ fun WarmupDetailsScreenPreview() {
                 true,
             ),
             onCompleteWarmup = {},
-            navigateBack = {}
+            navigateBack = {},
+            mediaPlayer = MediaPlayerService(" ", LocalContext.current),
         )
     }
 }
