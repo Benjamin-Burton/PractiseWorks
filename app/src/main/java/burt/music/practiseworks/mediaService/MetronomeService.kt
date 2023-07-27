@@ -9,6 +9,10 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.practiseworks.R
 import kotlinx.coroutines.delay
 
+/**
+ * This is the metronome service which practise tasks use in the
+ * bottom bar.
+ */
 class MetronomeService(
     var bpm: Int = 96,
     val maxBpm: Int = 220,

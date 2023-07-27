@@ -20,7 +20,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
- * Entity data class represents a single row in the database.
+ * Items entity - this is from Google's starter code and is not relevant
+ * to my app but it is left here as a template.
  */
 @Entity(tableName = "items")
 data class Item(

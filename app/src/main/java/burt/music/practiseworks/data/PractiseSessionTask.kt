@@ -22,7 +22,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 /**
- * Represents a resource that belongs to a task for the student.
+ * Represents a task that belongs to a particular practise session.
  */
 @Entity(tableName = "practise_session_task",
     primaryKeys = ["practise_session_id", "task_id"],

@@ -49,7 +49,8 @@ object PractiseScreenDestination : NavigationDestination {
 }
 
 /**
- * Entry route for TaskList screen
+ * Entry route for Practise Screen, which shows the tasks grouped by
+ * type and how many have been completed so far during the current practise session.
  */
 @Composable
 fun PractiseScreen(

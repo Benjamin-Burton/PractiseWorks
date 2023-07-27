@@ -3,6 +3,10 @@ package burt.music.practiseworks.data
 import androidx.room.TypeConverter
 import java.util.*
 
+/**
+ * Type converters for the database - converting between Java Date
+ *  objects and Longs (millis, i think)
+ */
 class Converters {
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {

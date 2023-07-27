@@ -21,7 +21,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 /**
- * Represents a resource that belongs to a task for the student.
+ * Represents the student.
  */
 @Entity(tableName = "resource", foreignKeys = [ForeignKey(entity = Task::class,
     parentColumns = arrayOf("id"),

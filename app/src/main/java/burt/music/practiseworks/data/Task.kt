@@ -45,6 +45,11 @@ data class TaskNumInfo(
     val count: Int
 )
 
+/**
+ * A data class for when you need to access the task's information,
+ * and also know whether or not it has been completed in the current
+ * practise session.
+ */
 data class TaskPlusCompleted(
     val id: Int = 0,
     val title: String,

@@ -9,7 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 
-
+/**
+ * A combination of the metronome and media player into one composable.
+ * This is not implemented and not used, yet.
+ */
 class MediaAndMetronomeScreenService {
     @Composable
     fun MetronomeView (

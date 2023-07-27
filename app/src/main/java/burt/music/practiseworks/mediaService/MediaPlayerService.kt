@@ -15,6 +15,15 @@ import com.example.practiseworks.R
 import kotlinx.coroutines.delay
 import java.io.File
 
+/**
+ * This class is the media player service that is used by practise tasks
+ * in the bottom bar.
+ * It requires a context variable - this doesn't seem to match well with
+ * the way compose handles lifecycle - requires more research to get this right.
+ * At the moment, if a track is playing and the screen is turned 90 degrees,
+ * the new screen will not have a handle to the media playing and it becomes
+ * impossible to stop the recording from playing without force-closing the app.
+ */
 class MediaPlayerService (
     val mContext: Context,
 ) {

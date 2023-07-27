@@ -6,7 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-
+/**
+ * This provides the instance of the database.
+ * Uses a pattern provided by Google codelabs to ensure that
+ * the database connection is a singleton.
+ *
+ * NOTE: Whenever the schema changes, the version number must be incremented.
+ * NOTE: Changing the schema deletes all data from the DB unless a Migrator is specified
+ * Might want to look into how to do that at some point.
+ */
 @Database(
     entities = [Item::class, CompletedTask::class, PieceSubtask::class, PractiseSession::class,
                 Resource::class, Student::class, Task::class, PractiseSessionTask::class],

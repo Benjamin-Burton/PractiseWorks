@@ -45,6 +45,7 @@ object HomeDestination : NavigationDestination {
 
 /**
  * Entry route for Home screen
+ * This is part of some starter code from a google codelab.
  */
 @Composable
 fun HomeScreen(

@@ -51,6 +51,10 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.text.NumberFormat
 import java.util.*
 
+/**
+ * The welcome screen, which displays the user profile and a
+ * button to start a new practise session.
+ */
 object WelcomeDestination : NavigationDestination {
     override val route = "welcome"
     override val titleRes = R.string.app_name
@@ -343,7 +347,6 @@ private fun WelcomeButtons(
             }
 
         }
-
     }
 }
 

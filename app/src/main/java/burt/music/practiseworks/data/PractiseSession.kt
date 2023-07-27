@@ -22,7 +22,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 /**
- * Represents a resource that belongs to a task for the student.
+ * Represents a single practise session for the student.
  */
 @Entity(tableName = "practise_session", foreignKeys = [ForeignKey(entity = Student::class,
     parentColumns = arrayOf("id"),
